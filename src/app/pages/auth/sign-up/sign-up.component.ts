@@ -15,6 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterModule } from '@angular/router';
 
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { AuthService, Credential } from '../../../core/services/auth.service';
 
 interface SignUpForm {
   names: FormControl<string>;
@@ -63,8 +64,22 @@ export class SignUpComponent {
     }),
   });
 
-  signUp():void{
-    if(this.form.invalid) return;
-    console.log(this.form.value)
+  private authService = inject(AuthService);
+  private _router = inject(Router);
+
+  async signUp():Promise<void> {
+    if (this.form.invalid) return;
+
+    const credential: Credential = {
+      email: this.form.value.email || '',
+      password: this.form.value.password || '',
+    };
+
+    try {
+      await this.authService.signUpWithEmailAndPassword(credential);
+      this._router.navigateByUrl('/')
+    } catch (error) {console.error(error)}
+
+
   }
 }
