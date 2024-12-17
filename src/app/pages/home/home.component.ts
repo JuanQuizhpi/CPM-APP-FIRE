@@ -12,7 +12,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 export default class HomeComponent {
 
   logOut(){
-
+    
   }
 
 }
