@@ -107,7 +107,11 @@ export class SignUpComponent {
       console.log(userCredentials);
       this._router.navigateByUrl('/');
       this.showUserCreatedAlert();
-    } catch (error) {
+    } catch (error:any) {
+
+      if(error.code === 'auth/email-already-in-use'){
+        this.showCorreoDuplicadoAlert();
+      }
       console.error(error);
     }
   }
@@ -120,6 +124,15 @@ export class SignUpComponent {
       icon: 'success',
       title: '¡Éxito!',
       text: 'Usuario creado exitosamente.',
+      confirmButtonText: 'Aceptar',
+    });
+  }
+
+  showCorreoDuplicadoAlert() {
+    Swal.fire({
+      icon: 'warning',
+      title: '¡Advertencia!',
+      text: 'Correo ya Registrado.',
       confirmButtonText: 'Aceptar',
     });
   }
