@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { AuthService, Credential } from '../../../core/services/auth.service';
 
 interface LogInForm {
   email: FormControl<string>;
@@ -39,6 +40,8 @@ export class LogInComponent {
   hide = true;
 
   formBuilder = inject(FormBuilder);
+  private authServide = inject(AuthService);
+  private _router = inject(Router);
 
   form: FormGroup<LogInForm> = this.formBuilder.group({
     email: this.formBuilder.control('', {
@@ -46,13 +49,47 @@ export class LogInComponent {
       nonNullable: true,
     }),
     password: this.formBuilder.control('', {
-      validators: Validators.required,
+      validators: [Validators.required, Validators.minLength(6)],
       nonNullable: true,
     }),
   });
 
-  logIn() {
+  get isEmailValid(): string | boolean {
+    const control = this.form.get('email');
+    const isInvalid = control?.invalid && control.touched;
+
+    if (isInvalid) {
+      return control.hasError('requiered')
+        ? 'Campo requerido'
+        : 'Ingrese Email Valido';
+    }
+    return false;
+  }
+
+  get isPasswordValid(): string | boolean{
+    const control = this.form.get('password');
+    const isInvalid = control?.invalid && control.touched;
+
+    if (isInvalid){
+      return control.hasError('required')
+      ? 'Campo requerido'
+      :'La contraseña debe tener al menos 6 caracteres'
+    }
+    return false;
+  }
+
+  async logIn(): Promise<void> {
     if (this.form.invalid) return;
-    console.log(this.form.value)
+    const credential: Credential = {
+      email: this.form.value.email || '',
+      password: this.form.value.password || '',
+    };
+    try {
+      const userCredentials=  await this.authServide.logInWithEmailAndPassword(credential);
+      console.log(userCredentials);
+      this._router.navigateByUrl('/')
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

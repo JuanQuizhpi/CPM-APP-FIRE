@@ -59,7 +59,7 @@ export class SignUpComponent {
       nonNullable: true,
     }),
     password: this.formBuilder.control('', {
-      validators: Validators.required,
+      validators: [Validators.required,Validators.minLength(6)],
       nonNullable: true,
     }),
   });
@@ -67,7 +67,31 @@ export class SignUpComponent {
   private authService = inject(AuthService);
   private _router = inject(Router);
 
-  async signUp():Promise<void> {
+  get isEmailValid(): string | boolean {
+    const control = this.form.get('email');
+    const isInvalid = control?.invalid && control.touched;
+
+    if (isInvalid) {
+      return control.hasError('required')
+        ? 'Campo requerido'
+        : 'Ingrese Email Valido';
+    }
+    return false;
+  }
+
+  get isPasswordValid(): string |boolean{
+    const control = this.form.get('password');
+    const isInvalid = control?.invalid && control.touched;
+
+    if(isInvalid){
+      return control.hasError('required')
+      ? 'Campo requerido'
+      : 'La contraseña debe tener al menos 6 caracteres'
+    }
+    return false;
+  }
+
+  async signUp(): Promise<void> {
     if (this.form.invalid) return;
 
     const credential: Credential = {
@@ -76,10 +100,11 @@ export class SignUpComponent {
     };
 
     try {
-      await this.authService.signUpWithEmailAndPassword(credential);
-      this._router.navigateByUrl('/')
-    } catch (error) {console.error(error)}
-
-
+      const userCredentials = await this.authService.signUpWithEmailAndPassword(credential);
+      console.log(userCredentials);
+      this._router.navigateByUrl('/');
+    } catch (error) {
+      console.error(error);
+    }
   }
 }

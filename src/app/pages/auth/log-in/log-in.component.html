@@ -5,8 +5,8 @@
         <div>
           <mat-form-field>
             <mat-label>Email</mat-label>
-            <input matInput />
-            <mat-error ></mat-error>
+            <input matInput formControlName="email" />
+            <mat-error *ngIf="isEmailValid as message">{{message}}</mat-error>
           </mat-form-field>
         </div>
   
@@ -27,7 +27,7 @@
             >
               <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
             </button>
-            <mat-error></mat-error>
+            <mat-error *ngIf="isPasswordValid as message">{{message}}</mat-error>
           </mat-form-field>
         </div>
   

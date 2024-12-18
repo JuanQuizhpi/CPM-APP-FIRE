@@ -35,4 +35,9 @@ export class AuthService {
       credential.password
     );
   }
+
+  logOut(): Promise<void>{
+    return this.auth.signOut();
+  }
+
 }
