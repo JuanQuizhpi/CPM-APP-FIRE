@@ -16,6 +16,7 @@ import { Router, RouterModule } from '@angular/router';
 
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AuthService, Credential } from '../../../core/services/auth.service';
+import Swal from 'sweetalert2';
 
 interface SignUpForm {
   names: FormControl<string>;
@@ -59,7 +60,7 @@ export class SignUpComponent {
       nonNullable: true,
     }),
     password: this.formBuilder.control('', {
-      validators: [Validators.required,Validators.minLength(6)],
+      validators: [Validators.required, Validators.minLength(6)],
       nonNullable: true,
     }),
   });
@@ -79,14 +80,14 @@ export class SignUpComponent {
     return false;
   }
 
-  get isPasswordValid(): string |boolean{
+  get isPasswordValid(): string | boolean {
     const control = this.form.get('password');
     const isInvalid = control?.invalid && control.touched;
 
-    if(isInvalid){
+    if (isInvalid) {
       return control.hasError('required')
-      ? 'Campo requerido'
-      : 'La contraseña debe tener al menos 6 caracteres'
+        ? 'Campo requerido'
+        : 'La contraseña debe tener al menos 6 caracteres';
     }
     return false;
   }
@@ -100,11 +101,26 @@ export class SignUpComponent {
     };
 
     try {
-      const userCredentials = await this.authService.signUpWithEmailAndPassword(credential);
+      const userCredentials = await this.authService.signUpWithEmailAndPassword(
+        credential
+      );
       console.log(userCredentials);
       this._router.navigateByUrl('/');
+      this.showUserCreatedAlert();
     } catch (error) {
       console.error(error);
     }
+  }
+
+  /**
+   * Alertas de acceso al sitio
+   */
+  showUserCreatedAlert() {
+    Swal.fire({
+      icon: 'success',
+      title: '¡Éxito!',
+      text: 'Usuario creado exitosamente.',
+      confirmButtonText: 'Aceptar',
+    });
   }
 }

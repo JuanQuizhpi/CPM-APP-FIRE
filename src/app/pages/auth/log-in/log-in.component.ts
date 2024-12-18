@@ -13,8 +13,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AuthService, Credential } from '../../../core/services/auth.service';
+import Swal from 'sweetalert2';
 
 interface LogInForm {
   email: FormControl<string>;
@@ -87,9 +87,31 @@ export class LogInComponent {
     try {
       const userCredentials=  await this.authServide.logInWithEmailAndPassword(credential);
       console.log(userCredentials);
+      this.showWelcomeAlert();
       this._router.navigateByUrl('/')
     } catch (error) {
       console.log(error);
+      this.showUnknownUserAlert();
     }
+  }
+
+  /**
+   * Alestas de acceso al sitio
+   */
+  showUnknownUserAlert() {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Usuario Desconocido',
+      confirmButtonText: 'Entendido'
+    });
+  }
+  showWelcomeAlert() {
+    Swal.fire({
+      icon: 'success',
+      title: '¡Bienvenido!',
+      text: 'Nos alegra verte de nuevo.',
+      confirmButtonText: 'Gracias'
+    });
   }
 }
