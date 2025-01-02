@@ -14,11 +14,22 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService, Credential } from '../../../core/services/auth.service';
+
+import { AbstractControl , ValidationErrors , ValidatorFn } from '@angular/forms';
 import Swal from 'sweetalert2';
 
 interface LogInForm {
   email: FormControl<string>;
   password: FormControl<string>;
+}
+
+//Validador personalizado
+export function emailUCuencaValidator(): ValidatorFn{
+  return (control : AbstractControl): ValidationErrors | null => {
+    const emailPattern = /@ucuenca\.edu\.ec$/;
+    const isValid = emailPattern.test(control.value || '');
+    return isValid ? null : {invalidEmail: true};
+  }
 }
 
 @Component({
@@ -45,7 +56,7 @@ export class LogInComponent {
 
   form: FormGroup<LogInForm> = this.formBuilder.group({
     email: this.formBuilder.control('', {
-      validators: [Validators.required, Validators.email],
+      validators: [Validators.required, Validators.email, emailUCuencaValidator()],
       nonNullable: true,
     }),
     password: this.formBuilder.control('', {
@@ -59,9 +70,13 @@ export class LogInComponent {
     const isInvalid = control?.invalid && control.touched;
 
     if (isInvalid) {
-      return control.hasError('requiered')
-        ? 'Campo requerido'
-        : 'Ingrese Email Valido';
+      if(control.hasError('required')){
+        return 'Campo requerido';
+      }else if(control.hasError('email')){
+        return 'Ingrese un email valido'
+      }else if(control.hasError('invalidEmail')){
+        return 'El correo debe ser de la institucion (@ucuenca.edu.ec)';
+      }
     }
     return false;
   }
