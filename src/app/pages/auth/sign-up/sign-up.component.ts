@@ -16,6 +16,7 @@ import { Router, RouterModule } from '@angular/router';
 
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AuthService, Credential } from '../../../core/services/auth.service';
+import { AbstractControl,ValidationErrors,ValidatorFn } from '@angular/forms';
 import Swal from 'sweetalert2';
 
 interface SignUpForm {
@@ -24,6 +25,16 @@ interface SignUpForm {
   email: FormControl<string>;
   password: FormControl<string>;
 }
+
+  //Validador personalizado @ucuenca.edu.ec
+  export function emailUCuencaValidator():ValidatorFn{
+    return (control:AbstractControl):ValidationErrors | null => {
+      //const emailPattern = /^[a-z]+\.[a-z]+@ucuenca\.edu\.ec$/;
+      const emailPattern = /@ucuenca\.edu\.ec$/;
+      const isValid = emailPattern.test(control.value || '');
+      return isValid ? null : {invalidEmail:true};
+    };
+  }
 
 @Component({
   selector: 'app-sign-up',
@@ -56,7 +67,7 @@ export class SignUpComponent {
       nonNullable: true,
     }),
     email: this.formBuilder.control('', {
-      validators: [Validators.required, Validators.email],
+      validators: [Validators.required, Validators.email,emailUCuencaValidator()],
       nonNullable: true,
     }),
     password: this.formBuilder.control('', {
@@ -73,9 +84,13 @@ export class SignUpComponent {
     const isInvalid = control?.invalid && control.touched;
 
     if (isInvalid) {
-      return control.hasError('required')
-        ? 'Campo requerido'
-        : 'Ingrese Email Valido';
+      if(control.hasError('required')){
+        return 'Campo requerido';
+      }else if(control.hasError('email')){
+        return 'Ingrese un email valido';
+      }else if(control.hasError('invalidEmail')){
+        return 'El correo debe ser de la institucion (@ucuenca.edu.ec)';
+      }
     }
     return false;
   }

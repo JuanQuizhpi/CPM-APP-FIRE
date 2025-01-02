@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
   imports: [MatToolbarModule, MatButtonModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
-})
+})  
 export default class HomeComponent {
   private authService = inject(AuthService);
   private _router = inject(Router);
@@ -42,7 +42,6 @@ export default class HomeComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         this.logOut();
-        //this.loginService.logout();
       }
     });
   }
