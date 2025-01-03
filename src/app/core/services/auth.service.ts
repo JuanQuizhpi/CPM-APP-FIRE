@@ -12,10 +12,13 @@ export interface Credential {
   password: string;
 }
 
+//Correos administradores
+const ADMIN_EMAILS = ['admin1@ucuenca.edu.ec','admin2@ucuenca.edu.ec'];
+
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService {
+export class AuthService {  
   private auth: Auth = inject(Auth);
 
   readonly authState$ = authState(this.auth);
@@ -38,6 +41,11 @@ export class AuthService {
 
   logOut(): Promise<void>{
     return this.auth.signOut();
+  }
+
+  //Metodo Roles de usuario
+  getUserRole(email:string): 'admin' |'student'{
+    return ADMIN_EMAILS.includes(email) ? 'admin':'student';
   }
 
 }

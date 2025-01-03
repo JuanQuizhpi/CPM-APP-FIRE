@@ -3,6 +3,8 @@ import HomeComponent from './pages/home/home.component';
 import { SignUpComponent } from './pages/auth/sign-up/sign-up.component';
 import { LogInComponent } from './pages/auth/log-in/log-in.component';
 import { authGuard, publicGuard } from './core/guards/auth.guard';
+import { roleGuard } from './core/guards/role.guard';
+
 
 export const routes: Routes = [
   {

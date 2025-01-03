@@ -1,14 +1,15 @@
 import { Component, inject } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
+import { MatButtonModule , MatIconButton } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
+
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [MatToolbarModule, MatButtonModule],
+  imports: [MatToolbarModule, MatButtonModule,MatButtonModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })  

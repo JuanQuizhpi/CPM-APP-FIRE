@@ -1,5 +1,33 @@
 <mat-toolbar color="accent">
-    <span>Ciudad Patrimonio Mundial (CPM)</span>
-
-    <button mat-flat-button (click)="showLogoutConfirmation()">Log out</button>
-</mat-toolbar>
+    <!-- Contenedor para el título y menú -->
+    <div class="menu-container">
+      <!-- Título -->
+      <span class="title">Ciudad Patrimonio Mundial (CPM)</span>
+  
+      <!-- Menú de navegación -->
+      <div class="menu">
+        <button mat-button routerLink="/home">Libros ESTUDIANTES</button>
+        <button mat-button routerLink="/about">Prestamos ESTUDIANTES</button>
+        <button mat-button routerLink="/services">Perfil ESTUDIANTES</button>
+        <button mat-button routerLink="/contact">Libros ADMIN</button>
+        <button mat-button routerLink="/contact">Prestamos ADMIN</button>
+        <button mat-button routerLink="/contact">Usuarios ADMIN</button>
+      </div>
+    </div>
+  
+    <!-- Espaciador para empujar el botón de logout -->
+    <span class="spacer"></span>
+  
+    <!-- Botón de Logout -->
+    <button
+      mat-flat-button
+      color="warn"
+      class="logout-btn"
+      (click)="showLogoutConfirmation()"
+      aria-label="Cerrar sesión"
+    >
+      Salir
+    </button>
+  </mat-toolbar>
+  
+  

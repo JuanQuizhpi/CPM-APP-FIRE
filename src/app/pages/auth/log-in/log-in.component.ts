@@ -93,6 +93,7 @@ export class LogInComponent {
     return false;
   }
 
+
   async logIn(): Promise<void> {
     if (this.form.invalid) return;
     const credential: Credential = {
