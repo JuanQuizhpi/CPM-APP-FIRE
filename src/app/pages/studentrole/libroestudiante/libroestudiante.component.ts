@@ -25,6 +25,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { Router } from '@angular/router';
 
+import { Clipboard } from '@angular/cdk/clipboard';
+
 @Component({
   selector: 'app-libroestudiante',
   standalone: true,
@@ -48,16 +50,22 @@ import { Router } from '@angular/router';
 })
 export class LibroestudianteComponent implements OnInit {
   books: Book[] = [];
+
   displayedColums: string[] = [
     'title',
     'author',
     'editorial',
+    'edicion',
     'publishedYear',
+    'bibliografiaSGS',
     'availability',
     'actions',
   ];
-
-  constructor(private bookService: BookService, private router: Router) {}
+  constructor(
+    private bookService: BookService,
+    private router: Router,
+    private clipboard: Clipboard
+  ) {}
 
   ngOnInit(): void {
     this.bookService.getBooks().subscribe((books) => {
@@ -87,5 +95,44 @@ export class LibroestudianteComponent implements OnInit {
 
   redirectToMakePrestamo(): void {
     console.log('Nos vamos a generar el prestamo');
+  }
+
+  /**
+   * Muestra la bibliografía del libro en una alerta de SweetAlert.
+   * @param book El libro cuya bibliografía se desea mostrar.
+   */
+
+  showBibliography(book: Book): void {
+    // Validación para evitar errores si no existe el atributo bibliografiaSGS
+    if (!book.bibliografiaSGS || book.bibliografiaSGS.trim() === '') {
+      Swal.fire({
+        title: 'Error',
+        text: 'Este libro no tiene una bibliografía asociada.',
+        icon: 'error',
+        confirmButtonText: 'Cerrar',
+      });
+      return;
+    }
+
+    const bibliography = book.bibliografiaSGS;
+
+    Swal.fire({
+      title: 'Bibliografía',
+      html: `<p>${bibliography}</p>`,
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonText: 'Copiar y cerrar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Copiamos la bibliografía al portapapeles
+        this.clipboard.copy(bibliography);
+        Swal.fire(
+          'Copiado',
+          'La bibliografía se copió al portapapeles.',
+          'success'
+        );
+      }
+    });
   }
 }
