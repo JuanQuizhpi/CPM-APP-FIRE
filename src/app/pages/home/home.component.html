@@ -6,12 +6,17 @@
   
       <!-- Menú de navegación -->
       <div class="menu">
-        <button mat-button routerLink="/home">Libros ESTUDIANTES</button>
-        <button mat-button routerLink="/about">Prestamos ESTUDIANTES</button>
-        <button mat-button routerLink="/services">Perfil ESTUDIANTES</button>
-        <button mat-button routerLink="/contact">Libros ADMIN</button>
-        <button mat-button routerLink="/contact">Prestamos ADMIN</button>
-        <button mat-button routerLink="/contact">Usuarios ADMIN</button>
+
+        <ng-container *ngIf="userRole==='student'">
+          <button mat-button routerLink="/home">Libros ESTUDIANTES</button>
+          <button mat-button routerLink="/about">Prestamos ESTUDIANTES</button>
+          <button mat-button routerLink="/services">Perfil ESTUDIANTES</button>
+        </ng-container>
+        <ng-container *ngIf="userRole==='admin'">
+          <button mat-button routerLink="/contact">Libros ADMIN</button>
+          <button mat-button routerLink="/contact">Prestamos ADMIN</button>
+          <button mat-button routerLink="/contact">Usuarios ADMIN</button>
+        </ng-container>
       </div>
     </div>
   
