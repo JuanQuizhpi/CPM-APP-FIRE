@@ -96,6 +96,7 @@ export class LibroadminComponent implements OnInit {
     this.router.navigate(['/crearlibrosAdmin']); // Asegúrate de que el path coincida con el definido en tus rutas
   }
 
+  //Metodo para Eliminar libro
   deleteBook(bookId: string): void {
     Swal.fire({
       title: '¿Estás seguro?',
@@ -127,5 +128,22 @@ export class LibroadminComponent implements OnInit {
       }
     });
   }
+
+  editBook(book: Book): void {
+    Swal.fire({
+      title: '¿Editar libro?',
+      text: `¿Quieres editar el libro "${book.title}"?`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, editar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Navegar al componente de edición con el ID del libro
+        this.router.navigate(['/actualizarlibrosAdmin', book.id]);
+      }
+    });
+  }
+  
   
 }

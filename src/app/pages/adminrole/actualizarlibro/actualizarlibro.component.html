@@ -1,1 +1,55 @@
-<p>actualizarlibro works!</p>
+<div class="form">
+  <div class="form__container">
+    <div class="edit-book-container">
+      <h2>Editar Libro</h2>
+
+      <form [formGroup]="bookForm" (ngSubmit)="saveChanges()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Título</mat-label>
+          <input matInput formControlName="title" />
+          <mat-error *ngIf="bookForm.get('title')?.hasError('required')">
+            El título es requerido
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Autor</mat-label>
+          <input matInput formControlName="author" />
+          <mat-error *ngIf="bookForm.get('author')?.hasError('required')">
+            El autor es requerido
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Editorial</mat-label>
+          <input matInput formControlName="editorial" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Ciudad</mat-label>
+          <input matInput formControlName="city" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Año de publicación</mat-label>
+          <input matInput formControlName="publishedYear" />
+          <mat-error *ngIf="bookForm.get('publishedYear')?.hasError('required')">
+            El año de publicación es requerido
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Disponibilidad</mat-label>
+          <mat-select formControlName="availability">
+            <mat-option [value]="true">Disponible</mat-option>
+            <mat-option [value]="false">No disponible</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="bookForm.invalid">
+          Guardar Cambios
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

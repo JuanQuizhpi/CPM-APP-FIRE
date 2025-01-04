@@ -46,7 +46,7 @@ export const routes: Routes = [
         canActivate: [authGuard, adminGuard],
       },
       {
-        path: 'actualizarlibrosAdmin',
+        path: 'actualizarlibrosAdmin/:id',
         component: ActualizarlibroComponent,
         canActivate: [authGuard, adminGuard],
       },

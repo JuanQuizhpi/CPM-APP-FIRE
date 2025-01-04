@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection,addDoc,doc,updateDoc,deleteDoc,collectionData, DocumentReference, DocumentData } from '@angular/fire/firestore';
+import { Firestore, collection,addDoc,doc,updateDoc,deleteDoc,collectionData, DocumentReference, DocumentData ,docData} from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
 
@@ -42,4 +42,11 @@ export class BookService {
         const bookDoc= doc(this.firestore , `books/${bookId}`);
         return deleteDoc(bookDoc);
     }
+
+    //Buscar libro por ID
+    getBookById(bookId: string): Observable<Book> {
+        const bookDoc = doc(this.firestore, `books/${bookId}`);
+        return docData(bookDoc, { idField: 'id' }) as Observable<Book>;
+      }
+      
 }
