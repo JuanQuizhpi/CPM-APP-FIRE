@@ -1,0 +1,35 @@
+<div class="form">
+    <div class="form__container">
+        <h1>Cargar Libro o Referencia</h1>
+        <form [formGroup]="bockForm" (ngSubmit)="showCreateConfirmation()">
+            <mat-form-field>
+                <mat-label>Título</mat-label>
+                <input matInput formControlName="title" />
+                <mat-error *ngIf="bockForm.controls['title'].invalid && bockForm.controls['title'].touched">Este campo
+                    es obligatorio</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Autor</mat-label>
+                <input matInput formControlName="author" />
+                <mat-error *ngIf="bockForm.controls['author'].invalid && bockForm.controls['author'].touched">Este campo
+                    es obligatorio</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Editorial</mat-label>
+                <input matInput formControlName="editorial" />
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Ciudad</mat-label>
+                <input matInput formControlName="city" />
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Año de publicación</mat-label>
+                <input matInput formControlName="publishedYear" type="number" />
+            </mat-form-field>
+            <mat-checkbox formControlName="availability">Disponible</mat-checkbox>
+
+            <button mat-raised-button type="submit" [disabled]="bockForm.invalid">Agregar libro</button>
+        </form>
+    </div>
+</div>

@@ -11,6 +11,8 @@ import { LibroadminComponent } from './pages/adminrole/libroadmin/libroadmin.com
 import { PrestamoadminComponent } from './pages/adminrole/prestamoadmin/prestamoadmin.component';
 import { UsuarioadminComponent } from './pages/adminrole/usuarioadmin/usuarioadmin.component';
 import { UnauthorizedComponent } from './pages/informative/unauthorized/unauthorized.component';
+import { ActualizarlibroComponent } from './pages/adminrole/actualizarlibro/actualizarlibro.component';
+import { CrearlibroComponent } from './pages/adminrole/crearlibro/crearlibro.component';
 
 export const routes: Routes = [
   {
@@ -36,6 +38,16 @@ export const routes: Routes = [
       {
         path: 'librosAdmin',
         component: LibroadminComponent,
+        canActivate: [authGuard, adminGuard],
+      },
+      {
+        path: 'actualizarlibrosAdmin',
+        component: ActualizarlibroComponent,
+        canActivate: [authGuard, adminGuard],
+      },
+      {
+        path: 'crearlibrosAdmin',
+        component: CrearlibroComponent,
         canActivate: [authGuard, adminGuard],
       },
       {
