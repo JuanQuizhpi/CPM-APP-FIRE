@@ -23,6 +23,7 @@ import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-libroadmin',
@@ -48,7 +49,7 @@ import { MatSortModule } from '@angular/material/sort';
 export class LibroadminComponent implements OnInit {
   books: Book[] = [];
 
-  constructor(private bookService: BookService) {}
+  constructor(private bookService: BookService, private router: Router) {}
  
   /*
   loadBooks(): void {
@@ -90,4 +91,41 @@ export class LibroadminComponent implements OnInit {
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '');
   }
+
+  redirectToAddBook(): void {
+    this.router.navigate(['/crearlibrosAdmin']); // Asegúrate de que el path coincida con el definido en tus rutas
+  }
+
+  deleteBook(bookId: string): void {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción eliminará el libro de forma permanente.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.bookService.deleteBook(bookId).then(() => {
+          Swal.fire({
+            title: 'Eliminado',
+            text: 'El libro ha sido eliminado correctamente.',
+            icon: 'success',
+            timer: 3000,
+            showConfirmButton: false
+          });
+        }).catch(error => {
+          console.error('Error eliminando libro:', error);
+          Swal.fire({
+            title: 'Error',
+            text: 'Ocurrió un error al eliminar el libro.',
+            icon: 'error',
+            timer: 3000,
+            showConfirmButton: false
+          });
+        });
+      }
+    });
+  }
+  
 }
