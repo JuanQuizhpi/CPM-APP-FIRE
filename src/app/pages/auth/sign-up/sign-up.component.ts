@@ -16,7 +16,7 @@ import { Router, RouterModule } from '@angular/router';
 
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AuthService, Credential } from '../../../core/services/auth.service';
-import { AbstractControl,ValidationErrors,ValidatorFn } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import Swal from 'sweetalert2';
 
 interface SignUpForm {
@@ -24,17 +24,19 @@ interface SignUpForm {
   lastName: FormControl<string>;
   email: FormControl<string>;
   password: FormControl<string>;
+  phone: FormControl<string>;
+  idcard: FormControl<string>;
 }
 
-  //Validador personalizado @ucuenca.edu.ec
-  export function emailUCuencaValidator():ValidatorFn{
-    return (control:AbstractControl):ValidationErrors | null => {
-      //const emailPattern = /^[a-z]+\.[a-z]+@ucuenca\.edu\.ec$/;
-      const emailPattern = /@ucuenca\.edu\.ec$/;
-      const isValid = emailPattern.test(control.value || '');
-      return isValid ? null : {invalidEmail:true};
-    };
-  }
+//Validador personalizado @ucuenca.edu.ec
+export function emailUCuencaValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    //const emailPattern = /^[a-z]+\.[a-z]+@ucuenca\.edu\.ec$/;
+    const emailPattern = /@ucuenca\.edu\.ec$/;
+    const isValid = emailPattern.test(control.value || '');
+    return isValid ? null : { invalidEmail: true };
+  };
+}
 
 @Component({
   selector: 'app-sign-up',
@@ -67,11 +69,27 @@ export class SignUpComponent {
       nonNullable: true,
     }),
     email: this.formBuilder.control('', {
-      validators: [Validators.required, Validators.email,emailUCuencaValidator()],
+      validators: [
+        Validators.required,
+        Validators.email,
+        emailUCuencaValidator(),
+      ],
       nonNullable: true,
     }),
     password: this.formBuilder.control('', {
       validators: [Validators.required, Validators.minLength(6)],
+      nonNullable: true,
+    }),
+    phone: this.formBuilder.control('', {
+      validators: [
+        Validators.required,
+        Validators.minLength(7),
+        Validators.maxLength(10),
+      ],
+      nonNullable: true,
+    }),
+    idcard: this.formBuilder.control('', {
+      validators: [Validators.required, Validators.minLength(10)],
       nonNullable: true,
     }),
   });
@@ -84,11 +102,11 @@ export class SignUpComponent {
     const isInvalid = control?.invalid && control.touched;
 
     if (isInvalid) {
-      if(control.hasError('required')){
+      if (control.hasError('required')) {
         return 'Campo requerido';
-      }else if(control.hasError('email')){
+      } else if (control.hasError('email')) {
         return 'Ingrese un email valido';
-      }else if(control.hasError('invalidEmail')){
+      } else if (control.hasError('invalidEmail')) {
         return 'El correo debe ser de la institucion (@ucuenca.edu.ec)';
       }
     }
@@ -113,6 +131,10 @@ export class SignUpComponent {
     const credential: Credential = {
       email: this.form.value.email || '',
       password: this.form.value.password || '',
+      names: this.form.value.names || '',
+      lastName : this.form.value.lastName || '',
+      phone: this.form.value.phone || '',
+      idcard:this.form.value.idcard || ''
     };
 
     try {
@@ -122,9 +144,8 @@ export class SignUpComponent {
       console.log(userCredentials);
       this._router.navigateByUrl('/');
       this.showUserCreatedAlert();
-    } catch (error:any) {
-
-      if(error.code === 'auth/email-already-in-use'){
+    } catch (error: any) {
+      if (error.code === 'auth/email-already-in-use') {
         this.showCorreoDuplicadoAlert();
       }
       console.error(error);

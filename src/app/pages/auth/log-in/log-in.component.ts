@@ -99,6 +99,10 @@ export class LogInComponent {
     const credential: Credential = {
       email: this.form.value.email || '',
       password: this.form.value.password || '',
+      names: '',
+      lastName :  '',
+      phone: '',
+      idcard:''
     };
     try {
       const userCredentials=  await this.authServide.logInWithEmailAndPassword(credential);
