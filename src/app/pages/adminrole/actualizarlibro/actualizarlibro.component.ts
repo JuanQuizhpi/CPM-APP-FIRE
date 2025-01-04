@@ -29,7 +29,10 @@ import { CommonModule } from '@angular/common';
     MatInputModule,
     MatIconModule,
     MatButtonModule,
-    MatCheckboxModule,MatSelectModule,CommonModule,NgIf
+    MatCheckboxModule,
+    MatSelectModule,
+    CommonModule,
+    NgIf,
   ],
   templateUrl: './actualizarlibro.component.html',
   styleUrl: './actualizarlibro.component.scss',
@@ -50,8 +53,10 @@ export class ActualizarlibroComponent implements OnInit {
       title: ['', Validators.required],
       author: ['', Validators.required],
       editorial: [''],
+      edicion: [''],
       city: [''],
       publishedYear: [null, Validators.required],
+      bibliografiaSGS: [''],
       availability: [true],
     });
     // Obtener el ID del libro desde la ruta
@@ -65,42 +70,48 @@ export class ActualizarlibroComponent implements OnInit {
         title: [book.title, Validators.required],
         author: [book.author, Validators.required],
         editorial: [book.editorial],
+        edicion: [book.edicion],
         city: [book.city],
         publishedYear: [book.publishedYear, Validators.required],
-        availability: [book.availability]
+        bibliografiaSGS:[book.bibliografiaSGS],
+        availability: [book.availability],
       });
     });
   }
 
   saveChanges(): void {
     if (this.bookForm.invalid) return;
-  
+
     // Obtener una copia de los valores del formulario
     const updatedBook = { ...this.bookForm.value };
-  
+
     // Asegurar que availability sea un valor booleano
-    updatedBook.availability = updatedBook.availability === 'true' ? true : updatedBook.availability;
-    updatedBook.availability = updatedBook.availability === 'false' ? false : updatedBook.availability;
-  
+    updatedBook.availability =
+      updatedBook.availability === 'true' ? true : updatedBook.availability;
+    updatedBook.availability =
+      updatedBook.availability === 'false' ? false : updatedBook.availability;
+
     // Actualizar el libro en Firestore
-    this.bookService.updateBook(this.bookId, updatedBook).then(() => {
-      Swal.fire({
-        title: 'Actualizado',
-        text: 'El libro ha sido actualizado correctamente.',
-        icon: 'success',
-        timer: 3000,
-        showConfirmButton: false
-      }).then(() => {
-        // Redirigir a la lista de libros
-        this.router.navigate(['/librosAdmin']);
+    this.bookService
+      .updateBook(this.bookId, updatedBook)
+      .then(() => {
+        Swal.fire({
+          title: 'Actualizado',
+          text: 'El libro ha sido actualizado correctamente.',
+          icon: 'success',
+          timer: 3000,
+          showConfirmButton: false,
+        }).then(() => {
+          // Redirigir a la lista de libros
+          this.router.navigate(['/librosAdmin']);
+        });
+      })
+      .catch((error) => {
+        Swal.fire({
+          title: 'Error',
+          text: 'Hubo un problema al actualizar el libro.',
+          icon: 'error',
+        });
       });
-    }).catch((error) => {
-      Swal.fire({
-        title: 'Error',
-        text: 'Hubo un problema al actualizar el libro.',
-        icon: 'error',
-      });
-    });
   }
-  
 }

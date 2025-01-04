@@ -41,7 +41,7 @@ import { Router } from '@angular/router';
     FormsModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
   ],
   templateUrl: './libroadmin.component.html',
   styleUrl: './libroadmin.component.scss',
@@ -50,7 +50,7 @@ export class LibroadminComponent implements OnInit {
   books: Book[] = [];
 
   constructor(private bookService: BookService, private router: Router) {}
- 
+
   /*
   loadBooks(): void {
     this.bookServie.getBooks().subscribe((books) => {
@@ -69,8 +69,11 @@ export class LibroadminComponent implements OnInit {
     'title',
     'author',
     'editorial',
+    'edicion',
     'publishedYear',
-    'availability','actions'
+    'bibliografiaSGS',
+    'availability',
+    'actions',
   ];
   dataSource = new MatTableDataSource<Book>();
   searchText: string = '';
@@ -104,27 +107,30 @@ export class LibroadminComponent implements OnInit {
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.bookService.deleteBook(bookId).then(() => {
-          Swal.fire({
-            title: 'Eliminado',
-            text: 'El libro ha sido eliminado correctamente.',
-            icon: 'success',
-            timer: 3000,
-            showConfirmButton: false
+        this.bookService
+          .deleteBook(bookId)
+          .then(() => {
+            Swal.fire({
+              title: 'Eliminado',
+              text: 'El libro ha sido eliminado correctamente.',
+              icon: 'success',
+              timer: 3000,
+              showConfirmButton: false,
+            });
+          })
+          .catch((error) => {
+            console.error('Error eliminando libro:', error);
+            Swal.fire({
+              title: 'Error',
+              text: 'Ocurrió un error al eliminar el libro.',
+              icon: 'error',
+              timer: 3000,
+              showConfirmButton: false,
+            });
           });
-        }).catch(error => {
-          console.error('Error eliminando libro:', error);
-          Swal.fire({
-            title: 'Error',
-            text: 'Ocurrió un error al eliminar el libro.',
-            icon: 'error',
-            timer: 3000,
-            showConfirmButton: false
-          });
-        });
       }
     });
   }
@@ -144,6 +150,4 @@ export class LibroadminComponent implements OnInit {
       }
     });
   }
-  
-  
 }

@@ -42,8 +42,10 @@ export class CrearlibroComponent {
       title: ['', Validators.required],
       author: ['', Validators.required],
       editorial: ['', Validators.required],
+      edicion:['', Validators.required],
       city: ['', Validators.required],
       publishedYear: [new Date().getFullYear(), Validators.required],
+      bibliografiaSGS: ['', Validators.required],
       availability: [true, Validators.required],
     });
   }

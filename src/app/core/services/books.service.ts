@@ -8,8 +8,10 @@ export interface Book{
     title: string;
     author: string;
     editorial:string;
+    edicion:string;
     city:string;
     publishedYear: number;
+    bibliografiaSGS: string;
     availability:boolean;
 }
 
