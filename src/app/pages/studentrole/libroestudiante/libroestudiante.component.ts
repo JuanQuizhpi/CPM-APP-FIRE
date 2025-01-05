@@ -151,7 +151,7 @@ export class LibroestudianteComponent implements OnInit {
     });
   }
 
-  //Metodos para obtener los usuarios 
+  //Metodos para obtener los usuarios
   userEmail: string | null = null;
 
   async getUserEmail() {
@@ -180,6 +180,17 @@ export class LibroestudianteComponent implements OnInit {
     }
   }
 
-
-  
+  async makePrestamo(book: Book): Promise<void> {
+    if (!book.availability) {
+      Swal.fire({
+        title: 'No Disponible',
+        text: 'El libro no está disponible para préstamo.',
+        icon: 'error',
+        confirmButtonText: 'Cerrar',
+      });
+      return;
+    }
+    console.log(book)
+    this.getUserEmail();
+  }
 }
