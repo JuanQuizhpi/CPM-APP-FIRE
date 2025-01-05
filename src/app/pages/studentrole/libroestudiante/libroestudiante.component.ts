@@ -90,7 +90,6 @@ export class LibroestudianteComponent implements OnInit {
   dataSource = new MatTableDataSource<Book>();
   searchText: string = '';
   searchField: string = 'title';
-  maxLoanDays = 30; // Número máximo de días permitido para un préstamo
 
   applyFilter(): void {
     const normalizeSearch = this.normalizeText(this.searchText);
@@ -180,6 +179,9 @@ export class LibroestudianteComponent implements OnInit {
     }
   }
 
+  //Metodo para generar el prestamo
+  maxLoanDays = 30; // Número máximo de días permitido para un préstamo
+
   async makePrestamo(book: Book): Promise<void> {
     if (!book.availability) {
       Swal.fire({
@@ -190,7 +192,149 @@ export class LibroestudianteComponent implements OnInit {
       });
       return;
     }
-    console.log(book)
-    this.getUserEmail();
+
+    console.log(book);
+
+    // Esperamos a obtener el correo del usuario
+    await this.getUserEmail();
+
+    // Verificamos si los datos del usuario están disponibles antes de continuar
+    /*if (!this.userData || !this.userData.names) {
+      Swal.fire({
+        title: 'Error',
+        text: 'No se pudo obtener los datos del usuario.',
+        icon: 'error',
+        confirmButtonText: 'Cerrar',
+      });
+      return;
+    }*/
+
+    if (!this.userData || !this.userData.names) {
+      let timerInterval: any;
+      Swal.fire({
+        title: 'Cargando datos...',
+        html: 'Intentando obtener los datos del usuario. Este mensaje se cerrará en <b></b> milisegundos.',
+        timer: 3000,
+        timerProgressBar: true,
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        didOpen: () => {
+          Swal.showLoading();
+          const timer = Swal.getPopup()?.querySelector('b');
+          timerInterval = setInterval(() => {
+            if (timer) {
+              timer.textContent = `${Swal.getTimerLeft()}`;
+            }
+          }, 100);
+        },
+        willClose: () => {
+          clearInterval(timerInterval);
+        },
+      }).then(async (result) => {
+        if (result.dismiss === Swal.DismissReason.timer) {
+          // Intentar obtener los datos nuevamente
+          try {
+            await this.getUserData();
+            if (!this.userData || !this.userData.names) {
+              Swal.fire({
+                title: 'Datos no disponibles',
+                text: 'No se pudieron obtener los datos del usuario después de varios intentos. Por favor, contacta al administrador.',
+                icon: 'error',
+                confirmButtonText: 'Cerrar',
+              });
+              return;
+            }
+          } catch (error) {
+            console.error('Error al obtener datos del usuario:', error);
+            Swal.fire({
+              title: 'Error',
+              text: 'Hubo un problema al cargar los datos del usuario. Intenta más tarde.',
+              icon: 'error',
+              confirmButtonText: 'Cerrar',
+            });
+          }
+        }
+      });
+      return;
+    }
+
+    // Mostrar resumen del préstamo en un SweetAlert
+    const { value: days } = await Swal.fire({
+      title: 'Resumen del Préstamo',
+      html: `
+        <p><strong>Libro:</strong> ${book.title}</p>
+        <p><strong>Autor:</strong> ${book.author}</p>
+        <p><strong>Estudiante:</strong> ${this.userData['names']} ${this.userData['lastName']}</p>
+        <p><strong>Email:</strong> ${this.userData['email']}</p>
+        <p><strong>Cédula:</strong> ${this.userData['idCard']}</p>
+        <p><strong>Teléfono:</strong> ${this.userData['phone']}</p>
+        <p>Seleccione los días de préstamo (máximo ${this.maxLoanDays} días):</p>
+        <input type="number" id="loan-days" class="swal2-input" min="1" max="${this.maxLoanDays}" value="14">
+      `,
+      confirmButtonText: 'Confirmar Préstamo',
+      showCancelButton: true,
+      preConfirm: () => {
+        const daysInput = parseInt(
+          (document.getElementById('loan-days') as HTMLInputElement)?.value ||
+            '0',
+          10
+        );
+        if (isNaN(daysInput) || daysInput < 1 || daysInput > this.maxLoanDays) {
+          Swal.showValidationMessage(
+            `Elija un número válido entre 1 y ${this.maxLoanDays} días.`
+          );
+        }
+        return daysInput;
+      },
+    });
+
+    if (!days) return; // El usuario canceló el préstamo
+
+    // Calcular fechas
+    const today = new Date();
+    const returnDate = new Date();
+    returnDate.setDate(today.getDate() + days);
+
+    // Crear el préstamo
+    const prestamosCollection = collection(this.firestore, 'prestamos');
+    const prestamo = {
+      bookId: book.id,
+      title: book.title,
+      author: book.author,
+      student: {
+        email: this.userData['email'],
+        names: this.userData['names'],
+        lastName: this.userData['lastName'],
+        phone: this.userData['phone'],
+        idCard: this.userData['idCard'],
+      },
+      borrowedAt: today.toISOString(),
+      returnAt: returnDate.toISOString(),
+      estado:true
+    };
+
+    try {
+      // Guardar el préstamo en Firestore
+      await addDoc(prestamosCollection, prestamo);
+
+      // Actualizar disponibilidad del libro
+      const bookDoc = doc(this.firestore, `books/${book.id}`);
+      await updateDoc(bookDoc, { availability: false });
+
+      Swal.fire({
+        title: 'Préstamo Exitoso',
+        text: `El libro "${book.title}" ha sido prestado por ${days} días.`,
+        icon: 'success',
+        confirmButtonText: 'Cerrar',
+      });
+    } catch (error) {
+      console.error('Error al registrar el préstamo:', error);
+      Swal.fire({
+        title: 'Error',
+        text: 'Ocurrió un problema al realizar el préstamo.',
+        icon: 'error',
+        confirmButtonText: 'Cerrar',
+      });
+    }
   }
 }
