@@ -9,7 +9,10 @@ import {
   collectionData,
   DocumentReference,
   DocumentData,
-  docData,query,where,getDocs
+  docData,
+  query,
+  where,
+  getDocs,
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
@@ -34,9 +37,9 @@ export interface Prestamo {
   providedIn: 'root',
 })
 export class PrestamoService {
-  private prestamosCollection = collection(this.firestore,'prestamos');
+  private prestamosCollection = collection(this.firestore, 'prestamos');
 
-  constructor(private firestore: Firestore){}
+  constructor(private firestore: Firestore) {}
 
   // Create - Agregar un nuevo préstamo
   async addPrestamo(prestamo: Prestamo): Promise<void> {
@@ -45,7 +48,9 @@ export class PrestamoService {
 
   // Read - Obtener todos los préstamos
   getPrestamos(): Observable<Prestamo[]> {
-    return collectionData(this.prestamosCollection, { idField: 'id' }) as Observable<Prestamo[]>;
+    return collectionData(this.prestamosCollection, {
+      idField: 'id',
+    }) as Observable<Prestamo[]>;
   }
 
   // Read - Obtener un préstamo por ID
@@ -56,7 +61,10 @@ export class PrestamoService {
 
   // Read - Obtener préstamos por estado
   async getPrestamosByEstado(estado: boolean): Promise<Prestamo[]> {
-    const prestamosQuery = query(this.prestamosCollection, where('estado', '==', estado));
+    const prestamosQuery = query(
+      this.prestamosCollection,
+      where('estado', '==', estado)
+    );
     const querySnapshot = await getDocs(prestamosQuery);
     return querySnapshot.docs.map((doc) => ({
       id: doc.id,
@@ -65,7 +73,10 @@ export class PrestamoService {
   }
 
   // Update - Actualizar un préstamo
-  async updatePrestamo(prestamoId: string, updatedData: Partial<Prestamo>): Promise<void> {
+  async updatePrestamo(
+    prestamoId: string,
+    updatedData: Partial<Prestamo>
+  ): Promise<void> {
     const prestamoDoc = doc(this.firestore, `prestamos/${prestamoId}`);
     await updateDoc(prestamoDoc, updatedData);
   }
@@ -80,10 +91,10 @@ export class PrestamoService {
   async cancelarPrestamo(prestamoId: string, bookId: string): Promise<void> {
     // Referencia al documento del préstamo
     const prestamoDocRef = doc(this.firestore, `prestamos/${prestamoId}`);
-    
+
     // Referencia al documento del libro
     const bookDocRef = doc(this.firestore, `books/${bookId}`);
-    
+
     try {
       // Actualizamos el estado del préstamo a "false" (anulado)
       await updateDoc(prestamoDocRef, { estado: false });
@@ -97,6 +108,14 @@ export class PrestamoService {
     }
   }
 
-
-
+  // Obtener préstamos por correo
+  getPrestamosByEmail(email: string): Observable<Prestamo[]> {
+    const prestamosQuery = query(
+      this.prestamosCollection,
+      where('student.email', '==', email)
+    );
+    return collectionData(prestamosQuery, { idField: 'id' }) as Observable<
+      Prestamo[]
+    >;
+  }
 }
