@@ -119,4 +119,5 @@ export class AuthService {
   getUserRole(email: string): 'admin' | 'student' {
     return ADMIN_EMAILS.includes(email) ? 'admin' : 'student';
   }
+
 }
