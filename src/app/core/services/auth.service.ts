@@ -9,15 +9,20 @@ import {
   collectionData,
   DocumentReference,
   DocumentData,
-  docData,setDoc
+  docData,setDoc,getDoc,
+  query,
+  where,
+  getDocs
 } from '@angular/fire/firestore';
 import {
   Auth,
   authState,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  UserCredential,
+  UserCredential,User
 } from '@angular/fire/auth';
+
+
 
 export interface Credential {
   email: string;
@@ -41,17 +46,37 @@ export class AuthService {
 
   private firestore: Firestore = inject(Firestore);
 
-  /*
-  signUpWithEmailAndPassword(credential: Credential): Promise<UserCredential> {
-    return createUserWithEmailAndPassword(
-      this.auth,
-      credential.email,
-      credential.password
-    );
-  }*/
 
   // Registro con datos adicionales
+  getUserEmail(): string | null {
+    const user = this.auth.currentUser;
+    return user ? user.email : null;
+  }
 
+  // Método para obtener datos del usuario por correo
+  async getUserDataByEmail(email: string): Promise<any> {
+    try {
+      // Referencia a la colección 'users'
+      const usersCollection = collection(this.firestore, 'users');
+
+      // Realizar la consulta para obtener el documento del usuario
+      const q = query(usersCollection, where('email', '==', email));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        // Si encontramos el documento, devolver los datos del primer usuario encontrado
+        return querySnapshot.docs[0].data();
+      } else {
+        console.error('No user found with this email');
+        return null;  // No se encontró el usuario
+      }
+    } catch (error) {
+      console.error('Error fetching user from Firestore:', error);
+      return null;
+    }
+  }
+
+  // Método para obtener un usuario por su correo
   async signUpWithEmailAndPassword(
     credential: Credential
   ): Promise<UserCredential> {

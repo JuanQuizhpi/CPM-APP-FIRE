@@ -26,6 +26,18 @@ import { MatSortModule } from '@angular/material/sort';
 import { Router } from '@angular/router';
 
 import { Clipboard } from '@angular/cdk/clipboard';
+import { AuthService } from '../../../core/services/auth.service';
+import {
+  Firestore,
+  collection,
+  addDoc,
+  doc,
+  updateDoc,
+  getDoc,
+} from '@angular/fire/firestore';
+
+import { lastValueFrom } from 'rxjs';
+import { User } from 'firebase/auth';
 
 @Component({
   selector: 'app-libroestudiante',
@@ -64,7 +76,9 @@ export class LibroestudianteComponent implements OnInit {
   constructor(
     private bookService: BookService,
     private router: Router,
-    private clipboard: Clipboard
+    private clipboard: Clipboard,
+    private authService: AuthService,
+    private firestore: Firestore
   ) {}
 
   ngOnInit(): void {
@@ -76,6 +90,7 @@ export class LibroestudianteComponent implements OnInit {
   dataSource = new MatTableDataSource<Book>();
   searchText: string = '';
   searchField: string = 'title';
+  maxLoanDays = 30; // Número máximo de días permitido para un préstamo
 
   applyFilter(): void {
     const normalizeSearch = this.normalizeText(this.searchText);
@@ -135,4 +150,36 @@ export class LibroestudianteComponent implements OnInit {
       }
     });
   }
+
+  //Metodos para obtener los usuarios 
+  userEmail: string | null = null;
+
+  async getUserEmail() {
+    this.authService.authState$.subscribe(async (user) => {
+      if (user) {
+        this.userEmail = user.email;
+        console.log('Correo del usuario autenticado:', this.userEmail);
+        if (this.userEmail) {
+          // Obtener los datos del usuario usando el correo
+          this.getUserData();
+        }
+      } else {
+        this.userEmail = null;
+        console.log('No hay usuario autenticado');
+      }
+    });
+  }
+
+  userData: any = null;
+
+  // Método para obtener los datos del usuario
+  async getUserData() {
+    if (this.userEmail) {
+      this.userData = await this.authService.getUserDataByEmail(this.userEmail);
+      console.log('User Data:', this.userData);
+    }
+  }
+
+
+  
 }
