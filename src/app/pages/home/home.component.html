@@ -8,14 +8,14 @@
       <div class="menu">
 
         <ng-container *ngIf="userRole==='student'">
-          <button mat-button routerLink="/librosEstudiante">Libros ESTUDIANTES</button>
-          <button mat-button routerLink="/prestamosEstudiante">Prestamos ESTUDIANTES</button>
-          <button mat-button routerLink="/perfilEstudiante">Perfil ESTUDIANTES</button>
+          <button mat-button routerLink="/librosEstudiante">Libros</button>
+          <button mat-button routerLink="/prestamosEstudiante">Historial Prestamos</button>
+          <button mat-button routerLink="/perfilEstudiante">Perfil</button>
         </ng-container>
         <ng-container *ngIf="userRole==='admin'">
-          <button mat-button routerLink="/librosAdmin">Libros ADMIN</button>
-          <button mat-button routerLink="/prestamosAdmin">Prestamos ADMIN</button>
-          <button mat-button routerLink="/usuariosAdmin">Usuarios ADMIN</button>
+          <button mat-button routerLink="/librosAdmin">Administración Libros</button>
+          <button mat-button routerLink="/prestamosAdmin">Administración Prestamos</button>
+          <button mat-button routerLink="/usuariosAdmin">Administración Usuarios</button>
         </ng-container>
       </div>
     </div>
@@ -26,7 +26,7 @@
     <!-- Botón de Logout -->
     <button
       mat-flat-button
-      color="warn"
+      color="primary"
       class="logout-btn"
       (click)="showLogoutConfirmation()"
       aria-label="Cerrar sesión"
