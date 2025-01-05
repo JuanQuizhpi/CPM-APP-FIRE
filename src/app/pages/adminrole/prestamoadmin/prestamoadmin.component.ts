@@ -47,7 +47,8 @@ import {
     FormsModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule,MatOptionModule
+    MatSortModule,
+    MatOptionModule,
   ],
   templateUrl: './prestamoadmin.component.html',
   styleUrl: './prestamoadmin.component.scss',
@@ -58,7 +59,7 @@ export class PrestamoadminComponent implements OnInit {
   searchText: string = '';
   searchField: string = 'title';
 
-  constructor(private prestamoService: PrestamoService) {}
+  constructor(private prestamoService: PrestamoService , private router: Router) {}
 
   ngOnInit(): void {
     this.prestamoService.getPrestamos().subscribe((prestamos) => {
@@ -99,37 +100,83 @@ export class PrestamoadminComponent implements OnInit {
   }
 
   deletePrestamo(prestamoId: string): void {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción eliminará el prestamo de forma permanente.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.prestamoService
+          .deletePrestamo(prestamoId)
+          .then(() => {
+            Swal.fire({
+              title: 'Eliminado',
+              text: 'El Prestamo ha sido eliminado correctamente.',
+              icon: 'success',
+              timer: 3000,
+              showConfirmButton: false,
+            });
+          })
+          .catch((error) => {
+            console.error('Error eliminando Prestamo:', error);
+            Swal.fire({
+              title: 'Error',
+              text: 'Ocurrió un error al eliminar el prestamo.',
+              icon: 'error',
+              timer: 3000,
+              showConfirmButton: false,
+            });
+          });
+      }
+    });
+  }
+
+  // Función para cancelar un préstamo
+  cancelarPrestamo(prestamoId: string, bookId: string): void {
+    // Verificamos que el estado del préstamo sea 'true' (activo)
+    const prestamo = this.dataSource.data.find((p) => p.id === prestamoId);
+    if (prestamo && prestamo.estado) {
       Swal.fire({
         title: '¿Estás seguro?',
-        text: 'Esta acción eliminará el prestamo de forma permanente.',
+        text: `¿Seguro que deseas cancelar el préstamo del libro "${prestamo.title}"?`,
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar',
-      }).then((result) => {
+        confirmButtonText: 'Sí, cancelar préstamo',
+        cancelButtonText: 'No, mantener préstamo',
+      }).then(async (result) => {
         if (result.isConfirmed) {
-          this.prestamoService
-            .deletePrestamo(prestamoId)
-            .then(() => {
-              Swal.fire({
-                title: 'Eliminado',
-                text: 'El Prestamo ha sido eliminado correctamente.',
-                icon: 'success',
-                timer: 3000,
-                showConfirmButton: false,
-              });
-            })
-            .catch((error) => {
-              console.error('Error eliminando Prestamo:', error);
-              Swal.fire({
-                title: 'Error',
-                text: 'Ocurrió un error al eliminar el prestamo.',
-                icon: 'error',
-                timer: 3000,
-                showConfirmButton: false,
-              });
-            });
+          try {
+            // Llamamos al servicio para cancelar el préstamo
+            await this.prestamoService.cancelarPrestamo(prestamoId, bookId);
+
+            // Actualizamos la vista para reflejar el cambio
+            this.dataSource.data = this.dataSource.data.filter(
+              (p) => p.id !== prestamoId
+            );
+            this.router.navigate(['/librosAdmin']);
+            Swal.fire(
+              'Préstamo Cancelado',
+              `El préstamo del libro "${prestamo.title}" ha sido cancelado.`,
+              'success'
+            );
+          } catch (error) {
+            Swal.fire(
+              'Error',
+              'Ocurrió un error al cancelar el préstamo.',
+              'error'
+            );
+          }
         }
       });
+    } else {
+      Swal.fire(
+        'No se puede cancelar',
+        'Este préstamo ya está cancelado o no es válido.',
+        'error'
+      );
     }
+  }
 }

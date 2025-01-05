@@ -75,4 +75,28 @@ export class PrestamoService {
     const prestamoDoc = doc(this.firestore, `prestamos/${prestamoId}`);
     await deleteDoc(prestamoDoc);
   }
+
+  // Método para cancelar un préstamo
+  async cancelarPrestamo(prestamoId: string, bookId: string): Promise<void> {
+    // Referencia al documento del préstamo
+    const prestamoDocRef = doc(this.firestore, `prestamos/${prestamoId}`);
+    
+    // Referencia al documento del libro
+    const bookDocRef = doc(this.firestore, `books/${bookId}`);
+    
+    try {
+      // Actualizamos el estado del préstamo a "false" (anulado)
+      await updateDoc(prestamoDocRef, { estado: false });
+
+      // Actualizamos la disponibilidad del libro a "true" (disponible)
+      await updateDoc(bookDocRef, { availability: true });
+
+      console.log('Préstamo cancelado correctamente');
+    } catch (error) {
+      console.error('Error al cancelar el préstamo:', error);
+    }
+  }
+
+
+
 }
