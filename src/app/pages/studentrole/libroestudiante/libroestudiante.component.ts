@@ -85,6 +85,7 @@ export class LibroestudianteComponent implements OnInit {
     this.bookService.getBooks().subscribe((books) => {
       this.dataSource.data = books;
     });
+    this.getUserEmail();
   }
 
   dataSource = new MatTableDataSource<Book>();

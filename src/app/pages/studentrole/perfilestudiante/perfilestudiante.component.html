@@ -1,1 +1,46 @@
-<p>perfilestudiante works!</p>
+<div class="container">
+    <!-- Parte 1 -->
+    <mat-card class="card">
+      <mat-card-title>Actualización de Credenciales del Estudiante</mat-card-title>
+      <mat-card-content>
+        <p>Correo electrónico: {{ userEmail }}</p>
+  
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Contraseña Actual</mat-label>
+          <input
+            matInput
+            id="currentPassword"
+            type="password"
+            [(ngModel)]="currentPassword"
+            placeholder="Ingresa tu contraseña actual"
+          />
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nueva Contraseña</mat-label>
+          <input
+            matInput
+            id="newPassword"
+            type="password"
+            [(ngModel)]="newPassword"
+            placeholder="Ingresa tu nueva contraseña"
+          />
+        </mat-form-field>
+  
+        <button mat-raised-button color="primary" (click)="changePassword()">
+          Actualizar Contraseña
+        </button>
+      </mat-card-content>
+    </mat-card>
+  
+    <!-- Parte 2 -->
+    <mat-card class="card">
+      <mat-card-title>Actualización de Datos del Estudiante</mat-card-title>
+      <mat-card-content>
+        <button mat-raised-button color="accent" (click)="getUserEmail()">
+          Obtener Usuario
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  

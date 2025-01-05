@@ -1,0 +1,20 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .card {
+    padding: 20px;
+    background-color: #1e1e1e;
+  }
+  
+  .full-width {
+    width: 100%;
+  }
+  :host {
+    background-color: #121212;
+    color: #e0e0e0;
+    display: block;
+  }
