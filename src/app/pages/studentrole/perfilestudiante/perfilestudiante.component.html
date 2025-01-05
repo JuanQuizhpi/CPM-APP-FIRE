@@ -1,46 +1,77 @@
 <div class="container">
     <!-- Parte 1 -->
     <mat-card class="card">
-      <mat-card-title>Actualización de Credenciales del Estudiante</mat-card-title>
-      <mat-card-content>
-        <p>Correo electrónico: {{ userEmail }}</p>
-  
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Contraseña Actual</mat-label>
-          <input
-            matInput
-            id="currentPassword"
-            type="password"
-            [(ngModel)]="currentPassword"
-            placeholder="Ingresa tu contraseña actual"
-          />
-        </mat-form-field>
-  
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Nueva Contraseña</mat-label>
-          <input
-            matInput
-            id="newPassword"
-            type="password"
-            [(ngModel)]="newPassword"
-            placeholder="Ingresa tu nueva contraseña"
-          />
-        </mat-form-field>
-  
-        <button mat-raised-button color="primary" (click)="changePassword()">
-          Actualizar Contraseña
-        </button>
-      </mat-card-content>
+        <mat-card-title>Actualización de Credenciales del Estudiante</mat-card-title>
+        <mat-card-content>
+            <p>Correo electrónico: {{ userEmail }}</p>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Contraseña Actual</mat-label>
+                <input matInput id="currentPassword" type="password" [(ngModel)]="currentPassword"
+                    placeholder="Ingresa tu contraseña actual" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Nueva Contraseña</mat-label>
+                <input matInput id="newPassword" type="password" [(ngModel)]="newPassword"
+                    placeholder="Ingresa tu nueva contraseña" />
+            </mat-form-field>
+
+            <button mat-raised-button color="primary" (click)="changePassword()">
+                Actualizar Contraseña
+            </button>
+        </mat-card-content>
     </mat-card>
-  
+
     <!-- Parte 2 -->
-    <mat-card class="card">
-      <mat-card-title>Actualización de Datos del Estudiante</mat-card-title>
-      <mat-card-content>
-        <button mat-raised-button color="accent" (click)="getUserEmail()">
-          Obtener Usuario
-        </button>
-      </mat-card-content>
+    <mat-card class="update-card">
+        <mat-card-title>Actualización de Datos del Estudiante</mat-card-title>
+        <mat-card-content>
+            <button mat-raised-button color="accent" (click)="getUserEmail()">
+                Obtener Usuario
+            </button>
+    
+            <div class="update-form">
+                <form class="padiBoton">
+                    <!-- Nombres -->
+                    <div class="form-group">
+                        <mat-form-field class="full-width">
+                            <mat-label>Nombres</mat-label>
+                            <input matInput placeholder="Ingresa tus nombres" />
+                        </mat-form-field>
+                    </div>
+    
+                    <!-- Apellidos -->
+                    <div class="form-group">
+                        <mat-form-field class="full-width">
+                            <mat-label>Apellidos</mat-label>
+                            <input matInput placeholder="Ingresa tus apellidos" />
+                        </mat-form-field>
+                    </div>
+    
+                    <!-- Teléfono -->
+                    <div class="form-group">
+                        <mat-form-field class="full-width">
+                            <mat-label>Teléfono</mat-label>
+                            <input matInput type="tel" placeholder="Ingresa tu teléfono" />
+                        </mat-form-field>
+                    </div>
+    
+                    <!-- Cédula (Deshabilitada) -->
+                    <div class="form-group">
+                        <mat-form-field class="full-width">
+                            <mat-label>Cédula</mat-label>
+                            <input matInput placeholder="Cédula" disabled />
+                        </mat-form-field>
+                    </div>
+    
+                    <!-- Botón Actualizar -->
+                    <div class="form-group">
+                        <button mat-flat-button color="primary" type="button">Actualizar Datos</button>
+                    </div>
+                </form>
+            </div>
+        </mat-card-content>
     </mat-card>
-  </div>
-  
+    
+</div>

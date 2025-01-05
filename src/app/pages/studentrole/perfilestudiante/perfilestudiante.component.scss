@@ -18,3 +18,45 @@
     color: #e0e0e0;
     display: block;
   }
+
+/* Estilos para el formulario de actualización de datos */
+.update-card {
+    width: 50%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #1e1e1e;
+    margin-left: 0; /* Eliminar el centrado */
+    margin-right: auto; /* Asegurar que se mantenga alineado a la izquierda */
+}
+
+.update-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.full-width {
+    width: 100%;
+}
+
+button {
+    align-self: center;
+    width: auto;
+    margin-top: 20px;
+}
+
+.padiBoton{
+    padding-top: 20px;
+}
