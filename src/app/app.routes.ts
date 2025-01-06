@@ -13,6 +13,7 @@ import { UsuarioadminComponent } from './pages/adminrole/usuarioadmin/usuarioadm
 import { UnauthorizedComponent } from './pages/informative/unauthorized/unauthorized.component';
 import { ActualizarlibroComponent } from './pages/adminrole/actualizarlibro/actualizarlibro.component';
 import { CrearlibroComponent } from './pages/adminrole/crearlibro/crearlibro.component';
+import { SocialmediaComponent } from './pages/presentacion/socialmedia/socialmedia.component';
 
 export const routes: Routes = [
   {
@@ -59,6 +60,11 @@ export const routes: Routes = [
         path: 'usuariosAdmin',
         component: UsuarioadminComponent,
         canActivate: [authGuard, adminGuard],
+      },
+      {
+        path: '',
+        component: SocialmediaComponent,
+        canActivate: [authGuard],
       },
     ],
   },
