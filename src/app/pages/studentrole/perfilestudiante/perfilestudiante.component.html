@@ -4,74 +4,110 @@
         <mat-card-title>Actualización de Credenciales del Estudiante</mat-card-title>
         <mat-card-content>
             <p>Correo electrónico: {{ userEmail }}</p>
-
-            <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Contraseña Actual</mat-label>
-                <input matInput id="currentPassword" type="password" [(ngModel)]="currentPassword"
-                    placeholder="Ingresa tu contraseña actual" />
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Nueva Contraseña</mat-label>
-                <input matInput id="newPassword" type="password" [(ngModel)]="newPassword"
-                    placeholder="Ingresa tu nueva contraseña" />
-            </mat-form-field>
-
-            <button mat-raised-button color="primary" (click)="changePassword()">
-                Actualizar Contraseña
-            </button>
+        
+            <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+                <!-- Contraseña Actual -->
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Contraseña Actual</mat-label>
+                    <input 
+                        matInput 
+                        id="currentPassword" 
+                        type="password" 
+                        formControlName="currentPassword" 
+                        placeholder="Ingresa tu contraseña actual"
+                    />
+                    <mat-error *ngIf="passwordForm.get('currentPassword')?.hasError('required')">
+                        La contraseña actual es requerida.
+                    </mat-error>
+                </mat-form-field>
+        
+                <!-- Nueva Contraseña -->
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Nueva Contraseña</mat-label>
+                    <input 
+                        matInput 
+                        id="newPassword" 
+                        type="password" 
+                        formControlName="newPassword" 
+                        placeholder="Ingresa tu nueva contraseña"
+                    />
+                    <mat-error *ngIf="passwordForm.get('newPassword')?.hasError('required')">
+                        La nueva contraseña es requerida.
+                    </mat-error>
+                    <mat-error *ngIf="passwordForm.get('newPassword')?.hasError('minlength')">
+                        La contraseña debe tener al menos 6 caracteres.
+                    </mat-error>
+                </mat-form-field>
+        
+                <button 
+                    mat-raised-button 
+                    color="primary" 
+                    type="submit" 
+                    [disabled]="passwordForm.invalid">
+                    Actualizar Contraseña
+                </button>
+            </form>
         </mat-card-content>
+        
     </mat-card>
 
     <!-- Parte 2 -->
     <mat-card class="update-card">
         <mat-card-title>Actualización de Datos del Estudiante</mat-card-title>
         <mat-card-content>
-            <button mat-raised-button color="accent" (click)="getUserEmail()">
+            <button mat-raised-button color="accent" (click)="getUserData()">
                 Obtener Usuario
             </button>
-    
             <div class="update-form">
-                <form class="padiBoton">
+                <form class="padiBoton" [formGroup]="form" (ngSubmit)="updateData()">
                     <!-- Nombres -->
                     <div class="form-group">
                         <mat-form-field class="full-width">
                             <mat-label>Nombres</mat-label>
-                            <input matInput placeholder="Ingresa tus nombres" />
+                            <input matInput formControlName="names" placeholder="Ingresa tus nombres" />
+                            <mat-error *ngIf="form.get('names')?.hasError('required')">
+                                El Nombre es requerido
+                            </mat-error>
                         </mat-form-field>
                     </div>
-    
+
                     <!-- Apellidos -->
                     <div class="form-group">
                         <mat-form-field class="full-width">
                             <mat-label>Apellidos</mat-label>
-                            <input matInput placeholder="Ingresa tus apellidos" />
+                            <input matInput formControlName="lastName" placeholder="Ingresa tus apellidos" />
+                            <mat-error *ngIf="form.get('lastName')?.hasError('required')">
+                                El Apellido es requerido
+                            </mat-error>
                         </mat-form-field>
                     </div>
-    
+
                     <!-- Teléfono -->
                     <div class="form-group">
                         <mat-form-field class="full-width">
                             <mat-label>Teléfono</mat-label>
-                            <input matInput type="tel" placeholder="Ingresa tu teléfono" />
+                            <input matInput formControlName="phone" type="tel" placeholder="Ingresa tu teléfono" />
+                            <mat-error *ngIf="form.get('phone')?.hasError('required')">
+                                El Télefono es requerido
+                            </mat-error>
                         </mat-form-field>
                     </div>
-    
+
                     <!-- Cédula (Deshabilitada) -->
                     <div class="form-group">
                         <mat-form-field class="full-width">
                             <mat-label>Cédula</mat-label>
-                            <input matInput placeholder="Cédula" disabled />
+                            <input matInput formControlName="idCard" placeholder="Cédula" [disabled]="true" />
                         </mat-form-field>
                     </div>
-    
+
                     <!-- Botón Actualizar -->
                     <div class="form-group">
-                        <button mat-flat-button color="primary" type="button">Actualizar Datos</button>
+                        <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">Actualizar Datos</button>
                     </div>
                 </form>
             </div>
         </mat-card-content>
     </mat-card>
-    
+
 </div>

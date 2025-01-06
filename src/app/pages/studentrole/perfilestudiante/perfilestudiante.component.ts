@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -34,6 +34,7 @@ import {
   updatePassword,
 } from 'firebase/auth';
 import { MatCardModule } from '@angular/material/card';
+
 @Component({
   selector: 'app-perfilestudiante',
   standalone: true,
@@ -51,13 +52,31 @@ import { MatCardModule } from '@angular/material/card';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MatOptionModule,MatCardModule
+    MatOptionModule,
+    MatCardModule,
   ],
   templateUrl: './perfilestudiante.component.html',
   styleUrl: './perfilestudiante.component.scss',
 })
 export class PerfilestudianteComponent implements OnInit {
-  constructor(private authService: AuthService) {}
+  form: FormGroup;
+  passwordForm: FormGroup;
+  constructor(
+    private authService: AuthService,
+    private fb: FormBuilder,
+    private userService: UserService
+  ) {
+    this.form = this.fb.group({
+      names: ['', Validators.required],
+      lastName: ['', Validators.required],
+      phone: ['', Validators.required],
+      idCard: [{ value: '', disabled: true }],
+    });
+    this.passwordForm = this.fb.group({
+      currentPassword: ['', [Validators.required]], // Contraseña actual requerida
+      newPassword: ['', [Validators.required, Validators.minLength(6)]], // Nueva contraseña: requerida y mínimo 6 caracteres
+    });
+  }
 
   //Metodos para obtener los usuarios
   userEmail: string | null = null;
@@ -79,6 +98,86 @@ export class PerfilestudianteComponent implements OnInit {
     });
   }
 
+  //Metodo para obtener los datos del usuario para actualizarlos
+  userData: any = null;
+  async getUserData() {
+    if (this.userEmail) {
+      this.userData = await this.authService.getUserDataByEmail(this.userEmail);
+      console.log('User Data:', this.userData);
+      // Asignar los valores al formulario
+      this.form.patchValue({
+        names: this.userData?.names,
+        lastName: this.userData?.lastName,
+        phone: this.userData?.phone,
+        idCard: this.userData?.idCard,
+      });
+    }
+  }
+
+  // Método para actualizar los datos si es necesario
+  /*updateData() : void {
+    if (this.form.valid) {
+      console.log('Form data:', this.form.value);
+      // Llama al servicio para actualizar los datos
+    }
+  }*/
+
+  updateData(): void {
+    if (this.form.invalid) {
+      Swal.fire({
+        title: 'Formulario inválido',
+        text: 'Por favor, completa todos los campos correctamente.',
+        icon: 'warning',
+      });
+      return;
+    }
+
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¿Deseas actualizar los datos del usuario?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#148f77',
+      cancelButtonColor: '#7d3c98',
+      confirmButtonText: 'Sí, actualizar',
+      cancelButtonText: 'No, cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Obtener una copia de los valores del formulario
+        const updatedUser = { ...this.form.value };
+
+        this.userService
+          .updateUserData(this.userData.id, updatedUser)
+          .then(() => {
+            Swal.fire({
+              title: 'Actualizado',
+              text: 'El Usuario ha sido actualizado correctamente.',
+              icon: 'success',
+              timer: 3000,
+              showConfirmButton: false,
+            }).then(() => {
+              this.form.reset();
+            });
+          })
+          .catch((error) => {
+            Swal.fire({
+              title: 'Error',
+              text: 'Hubo un problema al actualizar el Usuario.',
+              icon: 'error',
+            });
+          });
+      } else {
+        Swal.fire({
+          title: 'Cancelado',
+          text: 'La actualización ha sido cancelada.',
+          icon: 'info',
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      }
+    });
+  }
+
   ngOnInit(): void {
     this.getUserEmail();
   }
@@ -88,30 +187,86 @@ export class PerfilestudianteComponent implements OnInit {
   newPassword: string = ''; // Nueva contraseña
 
   // Cambiar contraseña del usuario
+  
   async changePassword() {
     try {
-      const auth = getAuth();
-      const currentUser = auth.currentUser;
-
-      if (!currentUser) {
-        console.error('No hay usuario autenticado');
+      if (this.passwordForm.invalid) {
+        // Mostrar mensaje de error si el formulario es inválido
+        Swal.fire({
+          title: 'Formulario inválido',
+          text: 'Por favor, completa todos los campos correctamente.',
+          icon: 'warning',
+        });
         return;
       }
 
-      // Reautenticación
-      const credential = EmailAuthProvider.credential(
-        currentUser.email!,
-        this.currentPassword
-      );
-      await reauthenticateWithCredential(currentUser, credential);
+      // Confirmación antes de proceder con la actualización
+      const result = await Swal.fire({
+        title: '¿Estás seguro?',
+        text: '¿Deseas actualizar tu contraseña?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#148f77',
+        cancelButtonColor: '#7d3c98',
+        confirmButtonText: 'Sí, actualizar',
+        cancelButtonText: 'No, cancelar',
+      });
 
-      // Actualización de la contraseña
-      await updatePassword(currentUser, this.newPassword);
-      console.log('Contraseña actualizada correctamente');
-      alert('Contraseña actualizada correctamente');
+      if (result.isConfirmed) {
+        const auth = getAuth();
+        const currentUser = auth.currentUser;
+
+        if (!currentUser) {
+          // Mostrar mensaje si no hay un usuario autenticado
+          Swal.fire({
+            title: 'Error',
+            text: 'No hay usuario autenticado.',
+            icon: 'error',
+          });
+          return;
+        }
+
+        const { currentPassword, newPassword } = this.passwordForm.value;
+
+        // Reautenticación
+        const credential = EmailAuthProvider.credential(
+          currentUser.email!,
+          currentPassword
+        );
+        await reauthenticateWithCredential(currentUser, credential);
+
+        // Actualización de la contraseña
+        await updatePassword(currentUser, newPassword);
+
+        // Mostrar mensaje de éxito
+        Swal.fire({
+          title: 'Éxito',
+          text: 'Contraseña actualizada correctamente.',
+          icon: 'success',
+          timer: 3000,
+          showConfirmButton: false,
+        });
+
+        // Resetear el formulario tras el éxito
+        this.passwordForm.reset();
+      } else {
+        // Mostrar mensaje si el usuario cancela la acción
+        Swal.fire({
+          title: 'Cancelado',
+          text: 'La actualización de contraseña ha sido cancelada.',
+          icon: 'info',
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      }
     } catch (error: any) {
+      // Mostrar mensaje de error
+      Swal.fire({
+        title: 'Error',
+        text: `No se pudo actualizar la contraseña. La contraseña actual ingresada es incorrecta.`,
+        icon: 'error',
+      });
       console.error('Error al actualizar la contraseña:', error.message);
-      alert(`Error al actualizar la contraseña: ${error.message}`);
     }
   }
 }

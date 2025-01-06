@@ -42,4 +42,10 @@ export class UserService {
     const userDoc = doc(this.firestore, `users/${userId}`);
     return docData(userDoc, { idField: 'id' }) as Observable<User>;
   }
+
+  // Actualizar datos del usuario en Firestore
+  updateUserData(userId: string, updatedData: any): Promise<void> {
+    const userDoc = doc(this.firestore,  `users/${userId}`);
+    return updateDoc(userDoc,updatedData);
+  }
 }

@@ -9,20 +9,21 @@ import {
   collectionData,
   DocumentReference,
   DocumentData,
-  docData,setDoc,getDoc,
+  docData,
+  setDoc,
+  getDoc,
   query,
   where,
-  getDocs
+  getDocs,
 } from '@angular/fire/firestore';
 import {
   Auth,
   authState,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  UserCredential,User
+  UserCredential,
+  User,
 } from '@angular/fire/auth';
-
-
 
 export interface Credential {
   email: string;
@@ -46,7 +47,6 @@ export class AuthService {
 
   private firestore: Firestore = inject(Firestore);
 
-
   // Registro con datos adicionales
   getUserEmail(): string | null {
     const user = this.auth.currentUser;
@@ -65,10 +65,13 @@ export class AuthService {
 
       if (!querySnapshot.empty) {
         // Si encontramos el documento, devolver los datos del primer usuario encontrado
-        return querySnapshot.docs[0].data();
+        //return querySnapshot.docs[0].data();
+        // Si encontramos el documento, devolver un objeto que incluya el ID del documento
+        const doc = querySnapshot.docs[0];
+        return { id: doc.id, ...doc.data() }; // Agregamos el `id` al objeto
       } else {
         console.error('No user found with this email');
-        return null;  // No se encontró el usuario
+        return null; // No se encontró el usuario
       }
     } catch (error) {
       console.error('Error fetching user from Firestore:', error);
@@ -119,5 +122,4 @@ export class AuthService {
   getUserRole(email: string): 'admin' | 'student' {
     return ADMIN_EMAILS.includes(email) ? 'admin' : 'student';
   }
-
 }
