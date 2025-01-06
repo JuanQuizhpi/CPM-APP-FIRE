@@ -70,6 +70,7 @@ export class LibroadminComponent implements OnInit {
     'author',
     'editorial',
     'edicion',
+    'city',
     'publishedYear',
     'bibliografiaSGS',
     'availability',

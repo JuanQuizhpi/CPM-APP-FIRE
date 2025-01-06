@@ -24,6 +24,9 @@
         <input type="radio" name="filter" value="edicion" [(ngModel)]="searchField" /> Edicion
       </label>
       <label>
+        <input type="radio" name="filter" value="city" [(ngModel)]="searchField" /> Ciudad
+      </label>
+      <label>
         <input type="radio" name="filter" value="publishedYear" [(ngModel)]="searchField" /> Año
       </label>
     </div>
@@ -60,6 +63,12 @@
     <ng-container matColumnDef="edicion">
       <th mat-header-cell *matHeaderCellDef> Edicion </th>
       <td mat-cell *matCellDef="let book"> {{ book.edicion }} </td>
+    </ng-container>
+
+    <!-- Ciudada] -->
+    <ng-container matColumnDef="city">
+      <th mat-header-cell *matHeaderCellDef> Ciudad </th>
+      <td mat-cell *matCellDef="let book"> {{ book.city }} </td>
     </ng-container>
 
     <!-- Año -->
