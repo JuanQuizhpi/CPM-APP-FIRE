@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Resend } from 'resend';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BookService, Book } from '../../../core/services/books.service';
 import {
   FormBuilder,
@@ -78,8 +80,11 @@ export class LibroestudianteComponent implements OnInit {
     private router: Router,
     private clipboard: Clipboard,
     private authService: AuthService,
-    private firestore: Firestore
-  ) {}
+    private firestore: Firestore,
+    private http: HttpClient
+  ) {
+    this.resend = new Resend('re_gsB6vNcp_8cNAePqLomfk23w6yLDwNLNu');
+  }
 
   ngOnInit(): void {
     this.bookService.getBooks().subscribe((books) => {
@@ -183,6 +188,10 @@ export class LibroestudianteComponent implements OnInit {
   //Metodo para generar el prestamo
   maxLoanDays = 30; // Número máximo de días permitido para un préstamo
 
+  //Apikey para correos
+  private resend: Resend;
+  //const resend = new Resend('re_gsB6vNcp_8cNAePqLomfk23w6yLDwNLNu');
+
   async makePrestamo(book: Book): Promise<void> {
     if (!book.availability) {
       Swal.fire({
@@ -200,15 +209,6 @@ export class LibroestudianteComponent implements OnInit {
     await this.getUserEmail();
 
     // Verificamos si los datos del usuario están disponibles antes de continuar
-    /*if (!this.userData || !this.userData.names) {
-      Swal.fire({
-        title: 'Error',
-        text: 'No se pudo obtener los datos del usuario.',
-        icon: 'error',
-        confirmButtonText: 'Cerrar',
-      });
-      return;
-    }*/
 
     if (!this.userData || !this.userData.names) {
       let timerInterval: any;
@@ -311,7 +311,7 @@ export class LibroestudianteComponent implements OnInit {
       },
       borrowedAt: today.toISOString(),
       returnAt: returnDate.toISOString(),
-      estado:true
+      estado: true,
     };
 
     try {
@@ -328,6 +328,52 @@ export class LibroestudianteComponent implements OnInit {
         icon: 'success',
         confirmButtonText: 'Cerrar',
       });
+
+      //Metodo para eviar correo
+      const apiUrl = '/api/emails'; // Usamos el proxy
+      const headers = new HttpHeaders({
+        Authorization: `re_gsB6vNcp_8cNAePqLomfk23w6yLDwNLNu`, // Reemplaza con tu API Key de Resend
+        'Content-Type': 'application/json',
+      });
+
+      const body = {
+        from: 'onboarding@resend.dev', // Cambia por tu correo de Resend
+        to: 'cpmucuenca@gmail.com', // Cambia por el correo del administrador
+        subject: 'Nuevo Préstamo Registrado',
+        html: `
+        <p>Estimado administrador,</p>
+        <p>Se ha registrado un nuevo préstamo en la biblioteca:</p>
+        <ul>
+          <li><strong>Libro:</strong> ${book.title}</li>
+          <li><strong>Autor:</strong> ${book.author}</li>
+          <li><strong>Estudiante:</strong> ${this.userData['names']} ${
+          this.userData['lastName']
+        }</li>
+          <li><strong>Email del Estudiante:</strong> ${
+            this.userData['email']
+          }</li>
+          <li><strong>Cédula del Estudiante:</strong> ${
+            this.userData['idCard']
+          }</li>
+          <li><strong>Teléfono del Estudiante:</strong> ${
+            this.userData['phone']
+          }</li>
+          <li><strong>Fecha de Préstamo:</strong> ${today.toLocaleDateString()}</li>
+          <li><strong>Fecha de Devolución:</strong> ${returnDate.toLocaleDateString()}</li>
+        </ul>
+        <p>Atentamente,</p>
+        <p>El equipo de la biblioteca</p>
+      `,
+      };
+
+      this.http.post(apiUrl, body, { headers }).subscribe(
+        (response) => {
+          console.log('Correo enviado con éxito:', response);
+        },
+        (error) => {
+          console.error('Error al enviar el correo:', error);
+        }
+      );
     } catch (error) {
       console.error('Error al registrar el préstamo:', error);
       Swal.fire({
@@ -337,5 +383,30 @@ export class LibroestudianteComponent implements OnInit {
         confirmButtonText: 'Cerrar',
       });
     }
+  }
+
+  // Método para enviar el correo
+  sendTestEmail() {
+    const apiUrl = '/api/emails'; // Usamos el proxy
+    const headers = new HttpHeaders({
+      Authorization: `re_gsB6vNcp_8cNAePqLomfk23w6yLDwNLNu`, // Reemplaza con tu API Key de Resend
+      'Content-Type': 'application/json',
+    });
+
+    const body = {
+      from: 'onboarding@resend.dev', // Cambia por tu correo de Resend
+      to: 'cpmucuenca@gmail.com', // Cambia por el correo al que quieras enviar el mensaje
+      subject: 'Prueba de Envío de Correo',
+      html: '<p>¡Este es un correo de prueba desde Angular 17!</p>',
+    };
+
+    this.http.post(apiUrl, body, { headers }).subscribe(
+      (response) => {
+        console.log('Correo enviado con éxito:', response);
+      },
+      (error) => {
+        console.error('Error al enviar el correo:', error);
+      }
+    );
   }
 }
