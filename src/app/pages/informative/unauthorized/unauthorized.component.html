@@ -1,1 +1,17 @@
-<p>unauthorized works!</p>
+<mat-card class="unauthorized-card">
+    <mat-card-header>
+      <mat-card-title class="title">Acceso Denegado</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p class="message">
+        Lo siento, no tienes permiso para acceder a esta página. 
+        Asegúrate de estar autenticado o intenta visitar una página con acceso permitido.
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="redirectToHome()">
+        Volver a la Página de Inicio
+      </button>
+    </mat-card-actions>
+  </mat-card>
+  
