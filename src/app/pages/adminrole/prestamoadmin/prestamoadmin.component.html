@@ -17,6 +17,12 @@
             <label>
                 <input type="radio" name="filter" value="author" [(ngModel)]="searchField" /> Autor
             </label>
+            <label>
+                <input type="radio" name="filter" value="categoria" [(ngModel)]="searchField" /> Categoria
+            </label>
+            <label>
+                <input type="radio" name="filter" value="returnAt" [(ngModel)]="searchField" /> Fecha Devolución 
+            </label>
         </div>
     </div>
 
@@ -38,6 +44,12 @@
         <ng-container matColumnDef="author">
             <th mat-header-cell *matHeaderCellDef> Autor </th>
             <td mat-cell *matCellDef="let prestamo"> {{ prestamo.author }} </td>
+        </ng-container>
+
+        <!-- Categoria -->
+        <ng-container matColumnDef="categoria">
+            <th mat-header-cell *matHeaderCellDef> Categoria </th>
+            <td mat-cell *matCellDef="let prestamo"> {{ prestamo.categoria }} </td>
         </ng-container>
 
         <!-- Fecha Préstamo -->

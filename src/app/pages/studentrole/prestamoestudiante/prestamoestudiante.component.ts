@@ -50,7 +50,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MatOptionModule,MatSelectModule
+    MatOptionModule,
+    MatSelectModule,
   ],
   templateUrl: './prestamoestudiante.component.html',
   styleUrl: './prestamoestudiante.component.scss',
@@ -62,6 +63,7 @@ export class PrestamoestudianteComponent implements OnInit {
     'bookId',
     'title',
     'author',
+    'categoria',
     'borrowedAt',
     'returnAt',
     'estado',
@@ -97,7 +99,7 @@ export class PrestamoestudianteComponent implements OnInit {
   // Método para filtrar los préstamos por estado
   filtrarPorEstado(prestamos: Prestamo[]): Prestamo[] {
     if (this.estadoSeleccionado === 'Activo') {
-      return prestamos.filter((prestamo) => prestamo.estado===true);
+      return prestamos.filter((prestamo) => prestamo.estado === true);
     } else if (this.estadoSeleccionado === 'Cancelado') {
       return prestamos.filter((prestamo) => !prestamo.estado);
     }

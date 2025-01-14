@@ -59,7 +59,10 @@ export class PrestamoadminComponent implements OnInit {
   searchText: string = '';
   searchField: string = 'title';
 
-  constructor(private prestamoService: PrestamoService , private router: Router) {}
+  constructor(
+    private prestamoService: PrestamoService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.prestamoService.getPrestamos().subscribe((prestamos) => {
@@ -71,6 +74,7 @@ export class PrestamoadminComponent implements OnInit {
     'bookId',
     'title',
     'author',
+    'categoria',
     'borrowedAt',
     'returnAt',
     'estado',

@@ -4,6 +4,11 @@
       <h2>Editar Libro</h2>
 
       <form [formGroup]="bookForm" (ngSubmit)="saveChanges()">
+        <mat-form-field appearance="outline">
+          <mat-label>Id bibliografía</mat-label>
+          <input matInput formControlName="idbibliografia" />
+        </mat-form-field>
+
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Título</mat-label>
           <input matInput formControlName="title" />
@@ -46,6 +51,11 @@
         <mat-form-field appearance="outline">
           <mat-label>Bibliografia</mat-label>
           <input matInput formControlName="bibliografiaSGS" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Categoria</mat-label>
+          <input matInput formControlName="categoria" />
         </mat-form-field>
 
         <mat-form-field appearance="outline">

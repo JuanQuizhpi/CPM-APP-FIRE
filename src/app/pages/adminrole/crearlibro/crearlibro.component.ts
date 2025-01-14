@@ -39,6 +39,7 @@ export class CrearlibroComponent {
   constructor(private booksService: BookService, private fb: FormBuilder, private router: Router) {
     //Inicializamos el formulario
     this.bockForm = this.fb.group({
+      idbibliografia: ['', Validators.required],
       title: ['', Validators.required],
       author: ['', Validators.required],
       editorial: ['', Validators.required],
@@ -46,6 +47,7 @@ export class CrearlibroComponent {
       city: ['', Validators.required],
       publishedYear: [new Date().getFullYear(), Validators.required],
       bibliografiaSGS: ['', Validators.required],
+      categoria:['', Validators.required],
       availability: [true, Validators.required],
     });
   }

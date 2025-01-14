@@ -115,13 +115,6 @@ export class PerfilestudianteComponent implements OnInit {
   }
 
   // Método para actualizar los datos si es necesario
-  /*updateData() : void {
-    if (this.form.valid) {
-      console.log('Form data:', this.form.value);
-      // Llama al servicio para actualizar los datos
-    }
-  }*/
-
   updateData(): void {
     if (this.form.invalid) {
       Swal.fire({

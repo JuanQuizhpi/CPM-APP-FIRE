@@ -50,6 +50,7 @@ export class ActualizarlibroComponent implements OnInit {
 
   ngOnInit(): void {
     this.bookForm = this.formBuilder.group({
+      idbibliografia: ['', Validators.required],
       title: ['', Validators.required],
       author: ['', Validators.required],
       editorial: [''],
@@ -57,6 +58,7 @@ export class ActualizarlibroComponent implements OnInit {
       city: [''],
       publishedYear: [null, Validators.required],
       bibliografiaSGS: [''],
+      categoria: [''],
       availability: [true],
     });
     // Obtener el ID del libro desde la ruta
@@ -67,13 +69,15 @@ export class ActualizarlibroComponent implements OnInit {
   loadBookDetails(): void {
     this.bookService.getBookById(this.bookId).subscribe((book) => {
       this.bookForm = this.formBuilder.group({
+        idbibliografia: [book.idbibliografia, Validators.required],
         title: [book.title, Validators.required],
         author: [book.author, Validators.required],
         editorial: [book.editorial],
         edicion: [book.edicion],
         city: [book.city],
         publishedYear: [book.publishedYear, Validators.required],
-        bibliografiaSGS:[book.bibliografiaSGS],
+        bibliografiaSGS: [book.bibliografiaSGS],
+        categoria: [book.categoria],
         availability: [book.availability],
       });
     });

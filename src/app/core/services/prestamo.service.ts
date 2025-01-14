@@ -21,6 +21,7 @@ export interface Prestamo {
   bookId: string;
   title: string;
   author: string;
+  categoria:string;
   student: {
     email: string;
     names: string;

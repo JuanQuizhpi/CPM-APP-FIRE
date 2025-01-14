@@ -29,6 +29,9 @@
       <label>
         <input type="radio" name="filter" value="publishedYear" [(ngModel)]="searchField" /> Año
       </label>
+      <label>
+        <input type="radio" name="filter" value="categoria" [(ngModel)]="searchField" /> Categoria
+      </label>
     </div>
   </div>
 
@@ -39,8 +42,23 @@
     </button>
   </div>
 
+  <!-- Botón de imprimir libros -->
+  <div class="add-button-container left-align ">
+    <button mat-raised-button color="primary" class="add-book-button" (click)="descargarLibros()">
+      Descargar Informacion
+    </button>
+  </div>
+
   <!-- Tabla -->
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 book-table">
+
+    <!-- ID Libro -->
+    <ng-container matColumnDef="idbibliografia">
+      <th mat-header-cell *matHeaderCellDef> Id bibliografía </th>
+      <td mat-cell *matCellDef="let book"> {{ book.idbibliografia }} </td>
+    </ng-container>
+
+
     <!-- Título -->
     <ng-container matColumnDef="title">
       <th mat-header-cell *matHeaderCellDef> Título </th>
@@ -81,6 +99,12 @@
     <ng-container matColumnDef="bibliografiaSGS">
       <th mat-header-cell *matHeaderCellDef> Bibliografia SGS </th>
       <td mat-cell *matCellDef="let book"> {{ book.bibliografiaSGS }} </td>
+    </ng-container>
+
+    <!-- Categoria -->
+    <ng-container matColumnDef="categoria">
+      <th mat-header-cell *matHeaderCellDef> Categoria </th>
+      <td mat-cell *matCellDef="let book"> {{ book.categoria }} </td>
     </ng-container>
 
     <!-- Disponibilidad -->

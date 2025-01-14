@@ -66,6 +66,7 @@ export class LibroadminComponent implements OnInit {
   }
 
   displayedColums: string[] = [
+    'idbibliografia',
     'title',
     'author',
     'editorial',
@@ -73,6 +74,7 @@ export class LibroadminComponent implements OnInit {
     'city',
     'publishedYear',
     'bibliografiaSGS',
+    'categoria',
     'availability',
     'actions',
   ];
@@ -151,4 +153,12 @@ export class LibroadminComponent implements OnInit {
       }
     });
   }
+
+  descargarLibros() {
+    console.log('Método descargarLibros llamado');
+    this.bookService.downloadBooksAsCSV()
+      .then(() => console.log('Descarga completada.'))
+      .catch(err => console.error('Error en la descarga:', err));
+  }
+  
 }

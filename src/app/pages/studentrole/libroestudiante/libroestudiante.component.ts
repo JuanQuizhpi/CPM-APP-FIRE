@@ -72,6 +72,7 @@ export class LibroestudianteComponent implements OnInit {
     'edicion',
     'publishedYear',
     'bibliografiaSGS',
+    'categoria',
     'availability',
     'actions',
   ];
@@ -186,7 +187,7 @@ export class LibroestudianteComponent implements OnInit {
   }
 
   //Metodo para generar el prestamo
-  maxLoanDays = 30; // Número máximo de días permitido para un préstamo
+  maxLoanDays = 5; // Número máximo de días permitido para un préstamo
 
   //Apikey para correos
   private resend: Resend;
@@ -265,12 +266,13 @@ export class LibroestudianteComponent implements OnInit {
       html: `
         <p><strong>Libro:</strong> ${book.title}</p>
         <p><strong>Autor:</strong> ${book.author}</p>
+        <p><strong>Autor:</strong> ${book.categoria}</p>
         <p><strong>Estudiante:</strong> ${this.userData['names']} ${this.userData['lastName']}</p>
         <p><strong>Email:</strong> ${this.userData['email']}</p>
         <p><strong>Cédula:</strong> ${this.userData['idCard']}</p>
         <p><strong>Teléfono:</strong> ${this.userData['phone']}</p>
         <p>Seleccione los días de préstamo (máximo ${this.maxLoanDays} días):</p>
-        <input type="number" id="loan-days" class="swal2-input" min="1" max="${this.maxLoanDays}" value="14">
+        <input type="number" id="loan-days" class="swal2-input" min="1" max="${this.maxLoanDays}" value="1">
       `,
       confirmButtonText: 'Confirmar Préstamo',
       showCancelButton: true,
@@ -302,6 +304,7 @@ export class LibroestudianteComponent implements OnInit {
       bookId: book.id,
       title: book.title,
       author: book.author,
+      categoria: book.categoria,
       student: {
         email: this.userData['email'],
         names: this.userData['names'],
@@ -346,6 +349,7 @@ export class LibroestudianteComponent implements OnInit {
         <ul>
           <li><strong>Libro:</strong> ${book.title}</li>
           <li><strong>Autor:</strong> ${book.author}</li>
+          <li><strong>Categoria:</strong> ${book.categoria}</li>
           <li><strong>Estudiante:</strong> ${this.userData['names']} ${
           this.userData['lastName']
         }</li>

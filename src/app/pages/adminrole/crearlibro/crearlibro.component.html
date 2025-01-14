@@ -3,6 +3,10 @@
         <h1>Cargar Libro o Referencia</h1>
         <form [formGroup]="bockForm" (ngSubmit)="showCreateConfirmation()">
             <mat-form-field>
+                <mat-label>Id bibliografía</mat-label>
+                <input matInput formControlName="idbibliografia" />
+            </mat-form-field>
+            <mat-form-field>
                 <mat-label>Título</mat-label>
                 <input matInput formControlName="title" />
                 <mat-error *ngIf="bockForm.controls['title'].invalid && bockForm.controls['title'].touched">Este campo
@@ -34,6 +38,10 @@
             <mat-form-field>
                 <mat-label>Bibliografia</mat-label>
                 <input matInput formControlName="bibliografiaSGS" />
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Categoria</mat-label>
+                <input matInput formControlName="categoria" />
             </mat-form-field>
             <mat-checkbox formControlName="availability">Disponible</mat-checkbox>
 
