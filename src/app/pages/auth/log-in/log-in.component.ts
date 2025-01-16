@@ -73,9 +73,9 @@ export class LogInComponent {
       if(control.hasError('required')){
         return 'Campo requerido';
       }else if(control.hasError('email')){
-        return 'Ingrese un email valido'
+        return 'Ingrese un correo válido'
       }else if(control.hasError('invalidEmail')){
-        return 'El correo debe ser de la institucion (@ucuenca.edu.ec)';
+        return 'El correo debe ser de la institución (@ucuenca.edu.ec)';
       }
     }
     return false;

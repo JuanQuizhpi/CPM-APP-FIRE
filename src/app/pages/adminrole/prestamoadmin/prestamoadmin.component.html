@@ -18,7 +18,7 @@
                 <input type="radio" name="filter" value="author" [(ngModel)]="searchField" /> Autor
             </label>
             <label>
-                <input type="radio" name="filter" value="categoria" [(ngModel)]="searchField" /> Categoria
+                <input type="radio" name="filter" value="categoria" [(ngModel)]="searchField" /> Categoría
             </label>
             <label>
                 <input type="radio" name="filter" value="returnAt" [(ngModel)]="searchField" /> Fecha Devolución 
@@ -48,7 +48,7 @@
 
         <!-- Categoria -->
         <ng-container matColumnDef="categoria">
-            <th mat-header-cell *matHeaderCellDef> Categoria </th>
+            <th mat-header-cell *matHeaderCellDef> Categoría </th>
             <td mat-cell *matCellDef="let prestamo"> {{ prestamo.categoria }} </td>
         </ng-container>
 
@@ -66,7 +66,7 @@
 
         <!-- Estado -->
         <ng-container matColumnDef="estado">
-            <th mat-header-cell *matHeaderCellDef> Estado Prestamo </th>
+            <th mat-header-cell *matHeaderCellDef> Estado Préstamo  </th>
             <td mat-cell *matCellDef="let prestamo"> {{ prestamo.estado ? 'Activo' : 'Inactivo'  }} </td>
         </ng-container>
 
@@ -78,7 +78,7 @@
 
         <!-- Estudiante Email-->
         <ng-container matColumnDef="studentEmail">
-            <th mat-header-cell *matHeaderCellDef> Email  </th>
+            <th mat-header-cell *matHeaderCellDef> Correo  </th>
             <td mat-cell *matCellDef="let prestamo"> {{ prestamo.student.email }} </td>
         </ng-container>
 

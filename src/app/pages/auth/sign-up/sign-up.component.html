@@ -1,6 +1,6 @@
 <div class="form">
   <div class="form__container">
-    <h1>Sign up</h1>
+    <h1>Crear Cuenta</h1>
     <form [formGroup]="form" (ngSubmit)="signUp()">
       <div>
         <mat-form-field>
@@ -35,7 +35,7 @@
       </div>
       <div>
         <mat-form-field>
-          <mat-label>Email</mat-label>
+          <mat-label>Correo</mat-label>
           <input matInput formControlName="email" />
           <mat-error *ngIf="isEmailValid as  message">{{message}}</mat-error>
         </mat-form-field>
@@ -43,7 +43,7 @@
 
       <div>
         <mat-form-field>
-          <mat-label>Enter your password</mat-label>
+          <mat-label>Contraseña</mat-label>
           <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" />
           <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
             [attr.aria-pressed]="hide">
@@ -54,10 +54,10 @@
       </div>
 
       <div>
-        <button mat-flat-button color="accent" type="submit" [disabled]="form.invalid">Sign up</button>
+        <button mat-flat-button color="accent" type="submit" [disabled]="form.invalid">Crear Cuenta</button>
       </div>
     </form>
     <hr />
-    <span class="small-text log-in-redirect">Already have an account? <a routerLink="/auth/log-in">Log in</a></span>
+    <span class="small-text log-in-redirect">¿Ya tienes una cuenta ? <a routerLink="/auth/log-in">Iniciar Sesión</a></span>
   </div>
 </div>

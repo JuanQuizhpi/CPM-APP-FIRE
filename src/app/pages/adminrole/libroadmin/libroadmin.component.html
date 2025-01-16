@@ -21,7 +21,7 @@
         <input type="radio" name="filter" value="editorial" [(ngModel)]="searchField" /> Editorial
       </label>
       <label>
-        <input type="radio" name="filter" value="edicion" [(ngModel)]="searchField" /> Edicion
+        <input type="radio" name="filter" value="edicion" [(ngModel)]="searchField" /> Edición
       </label>
       <label>
         <input type="radio" name="filter" value="city" [(ngModel)]="searchField" /> Ciudad
@@ -30,7 +30,7 @@
         <input type="radio" name="filter" value="publishedYear" [(ngModel)]="searchField" /> Año
       </label>
       <label>
-        <input type="radio" name="filter" value="categoria" [(ngModel)]="searchField" /> Categoria
+        <input type="radio" name="filter" value="categoria" [(ngModel)]="searchField" /> Categoría
       </label>
     </div>
   </div>
@@ -45,7 +45,7 @@
   <!-- Botón de imprimir libros -->
   <div class="add-button-container left-align ">
     <button mat-raised-button color="primary" class="add-book-button" (click)="descargarLibros()">
-      Descargar Informacion
+      Descargar Información
     </button>
   </div>
 
@@ -79,7 +79,7 @@
 
     <!-- Edicion -->
     <ng-container matColumnDef="edicion">
-      <th mat-header-cell *matHeaderCellDef> Edicion </th>
+      <th mat-header-cell *matHeaderCellDef> Edición </th>
       <td mat-cell *matCellDef="let book"> {{ book.edicion }} </td>
     </ng-container>
 
@@ -103,7 +103,7 @@
 
     <!-- Categoria -->
     <ng-container matColumnDef="categoria">
-      <th mat-header-cell *matHeaderCellDef> Categoria </th>
+      <th mat-header-cell *matHeaderCellDef> Categoría </th>
       <td mat-cell *matCellDef="let book"> {{ book.categoria }} </td>
     </ng-container>
 

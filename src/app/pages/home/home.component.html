@@ -9,12 +9,12 @@
 
         <ng-container *ngIf="userRole==='student'">
           <button mat-button routerLink="/librosEstudiante">Libros</button>
-          <button mat-button routerLink="/prestamosEstudiante">Historial Prestamos</button>
+          <button mat-button routerLink="/prestamosEstudiante">Historial Préstamo</button>
           <button mat-button routerLink="/perfilEstudiante">Perfil</button>
         </ng-container>
         <ng-container *ngIf="userRole==='admin'">
           <button mat-button routerLink="/librosAdmin">Administración Libros</button>
-          <button mat-button routerLink="/prestamosAdmin">Administración Prestamos</button>
+          <button mat-button routerLink="/prestamosAdmin">Administración Préstamos</button>
           <button mat-button routerLink="/usuariosAdmin">Administración Usuarios</button>
         </ng-container>
       </div>
