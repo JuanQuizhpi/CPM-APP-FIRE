@@ -12,15 +12,15 @@
 
 ## Entorno de desarrollo del proyecto
 
-+ Version de Angular
++ Versión de Angular
 
 `Angular CLI: 17.3.11`
 
-+ Version de Node.js
++ Versión de Node.js
 
 `Node: 18.20.5`
 
-+ Version de npm
++ Versión de npm
 
 `Package Manager: npm 10.8.2`
 
