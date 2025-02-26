@@ -6,7 +6,7 @@
 
 ## Enlace al Manual de uso de la app
 
-+ https://drive.google.com/file/d/1Sb0o8T67iPc8InNsJnG-L2Bqr3rjZlr-/view?usp=sharing
++ https://drive.google.com/file/d/1kk5UD4UTOc1ZC9F9NSZVvp7dDx1_uUcK/view?usp=sharing
 
 ## Comando para ejecución de la aplicación
 
