@@ -4,12 +4,6 @@
 
 + https://cpm-app-b08cd.web.app/ 
 
-### Credenciales admin
-
-+ Correo : admin2@ucuenca.edu.ec
-+ Clave : admin123
-
-
 ## Enlace al Manual de uso de la app
 
 + https://drive.google.com/file/d/1Sb0o8T67iPc8InNsJnG-L2Bqr3rjZlr-/view?usp=sharing
